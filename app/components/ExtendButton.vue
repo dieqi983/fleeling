@@ -37,7 +37,7 @@ const props = defineProps({
   },
   borderRadius: {
     type: Number,
-    default: 50
+    default: null
   },
   coverSpeed: {
     type: Number,
@@ -45,11 +45,11 @@ const props = defineProps({
   },
   buttonColor: {
     type: String,
-    default: 'black'
+    default: null
   },
   coverColor: {
     type: String,
-    default: 'rgb(236, 119, 2)'
+    default: null
   },
   normalText: {
     type: String,
@@ -160,17 +160,22 @@ const cssVariables = computed(() => {
     '--button-height': props.buttonSize.height + 'px',
     '--expanded-width': props.expandedSize.width + 'px',
     '--expanded-height': props.expandedSize.height + 'px',
-    '--border-radius': props.borderRadius + 'px',
-    '--button-color': props.buttonColor,
+    ...(props.borderRadius && {
+      '--border-radius': props.borderRadius + 'px',
+    }),
+    ...(props.buttonColor && {
+      '--button-color': props.buttonColor,
+    }),
     '--cover-speed': props.coverSpeed + 's',
-    '--cover-color': props.coverColor,
+    ...(props.coverColor && {
+      '--cover-color': props.coverColor,
+    }),
     '--cover-size': Math.max(
       parseInt(props.buttonSize.width), 
       parseInt(props.buttonSize.height)
     ) * 2.5 + 'px'
   }
 })
-
 
 
 // 暴露方法
@@ -193,8 +198,8 @@ onUnmounted(() => {
   position: relative;
   width: var(--button-width, 180px);
   height: var(--button-height, 50px);
-  border-radius: var(--border-radius, 50px);
-  background-color: var(--button-color, 'black');
+  border-radius: var(--border-radius, var(--button-radius));
+  background-color: var(--button-color, var(--text-color));
   border: none;
   cursor: pointer;
   overflow: hidden;
@@ -253,8 +258,8 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(246, 221, 233);
-    font-size: 20px;
+    color: var(--text-un-color);
+    font-size: var(--text-size-sm);
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 500;
     transition: all var(--cover-speed, 0.6s) cubic-bezier(0.4, 0, 0.2, 1);
@@ -276,7 +281,7 @@ onUnmounted(() => {
     width: var(--cover-size, 360px);
     height: var(--cover-size, 360px);
     border-radius: 50%;
-    background-color: var(--cover-color, rgba(0, 0, 0, 0.8));
+    background-color: var(--cover-color, var(--button-bg-color));
     left: calc(var(--mouse-x, 50%) - (var(--cover-size, 360px) / 2));
     top: calc(var(--mouse-y, 50%) - (var(--cover-size, 360px) / 2));
     transform-origin: center;
@@ -284,7 +289,7 @@ onUnmounted(() => {
     opacity: 0;
     transition: all var(--cover-speed, 0.6s) cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
   }
   
   &:not(.isOpen):hover {

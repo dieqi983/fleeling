@@ -14,33 +14,51 @@
       </div>
       </extend-button>
     </div>
-    <div class="cube-container">
-      <Cube
-      :textures="[
-        '/textures/1.jpg',
-        '/textures/2.jpg',
-        '/textures/3.jpg',
-        '/textures/4.jpg',
-        '/textures/5.jpg',
-        '/textures/6.jpg',
-      ]"
-      :cubeSize="{
-        height:4,
-        width:4,
-        depth:4,
-      }"
-      :cameraPositon="{
-        x:0,
-        y:0,
-        z:7.5,
-      }"
-      />
+    <div class="center-container">
+      <div class="nav-text-container">
+        <div class="text">
+          <p>sasahskjask</p>
+          <p>sjdhsjkdk</p>
+          <p>dkaldjaklsj</p>
+          <p>dkaldjaklsj</p>
+          <p>dkaldjaklsj</p>
+          <p>dkaldjaklsj</p>
+        </div>
+        <SlideText text="默认嘻嘻哈哈"/>
+      </div>
+      <div class="cube-container">
+        <Cube
+        :textures="[
+          '/textures/1.jpg',
+          '/textures/2.jpg',
+          '/textures/3.jpg',
+          '/textures/4.jpg',
+          '/textures/5.jpg',
+          '/textures/6.jpg',
+        ]"
+        :cubeSize="{
+          height:4,
+          width:4,
+          depth:4,
+        }"
+        :cameraPositon="{
+          x:0,
+          y:0,
+          z:7.5,
+        }"
+        />
+      </div>
+      <div class="guidebar-container">
+        <GuideBar/>
+      </div>
     </div>
-      <GuideBar/>
+
 </div>
 </template>
 
 <script setup>
+import SlideText from '../components/SlideText.vue';
+
 
 const buttonIsOpen=ref(false)
 const closeButton=()=>{
@@ -56,14 +74,37 @@ const closeButton=()=>{
   display: flex;
   align-items: center;
   justify-content: center;
-  .cube-container{
-  width: min(80vmin, 700px);
-  aspect-ratio: 1 / 1;
+  .center-container{
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    // border: 1px solid pink;
+    .nav-text-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: fit-content;
+      height: 100%;
+      // background-color: green;
+    }
+    .cube-container{
+      // border: black solid 1px;
+      width: min(80vmin, 700px);
+      aspect-ratio: 1 / 1;
+      }
+    .guide-box{
+        height: 50px;
+        width:150px;
+      }
   }
   .button-box{
   position: fixed;
   top: 5vh;
   right:5vw;
+  z-index: 2000;
     .test-list{
       color: white;
       display: flex;
@@ -73,10 +114,6 @@ const closeButton=()=>{
       gap: 10px;
       align-items: center;
     }
-  }
-  .guide-box{
-    height: 50px;
-    width:150px;
   }
 }
 </style>

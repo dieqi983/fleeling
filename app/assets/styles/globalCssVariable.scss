@@ -1,0 +1,9 @@
+:root{
+  --text-color:rgb(0, 0, 0);
+  --text-un-color:rgb(255, 255, 255);
+  --button-bg-color:rgb(241, 121, 1);
+  --button-radius:50px;
+  --text-size-sm:clamp(0.8rem, 2vw, 1.2rem);
+  --text-size-md:clamp(1.1rem, 2.5vw, 1.8rem);
+  --text-size-lg:clamp(1.5rem, 3vw, 2.1rem);
+}

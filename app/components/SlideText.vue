@@ -224,11 +224,10 @@ defineExpose({
   display: inline-grid;
   grid-template-areas: "content";
   font-family: 'Arial', sans-serif;
-  font-size: 48px;
-  font-weight: bold;
+  font-size: var(--text-size-sm);
   user-select: none;
   min-height: 1.2em;
-  
+  font-weight: 500;
   .text-container {
     grid-area: content;
     display: inline-flex;

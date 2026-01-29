@@ -28,10 +28,6 @@
 
 <script setup>
 import { gsap } from 'gsap'
-import { ref, watch, onMounted, nextTick, onUnmounted } from 'vue'
-import { useDynamicRefs } from '@/composables/useDynamicRefs'
-import { useTextToChars } from '../composables/useTextToCharts'
-
 const props = defineProps({
   // 外部传入的字符串，每次变化都会触发动画
   text: {
@@ -195,6 +191,7 @@ watch(() => props.text, (newText) => {
 // 初始化
 onMounted(() => {
   ctx=gsap.context(()=>{},rootRef.value)
+
   if (props.text) {
     currentText.value = props.text
   }
@@ -224,7 +221,8 @@ defineExpose({
   display: inline-grid;
   grid-template-areas: "content";
   font-family: 'Arial', sans-serif;
-  font-size: var(--text-size-sm);
+  font-size: var(--text-size-md);
+  color:var(--text-color);
   user-select: none;
   min-height: 1.2em;
   font-weight: 500;

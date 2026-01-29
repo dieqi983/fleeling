@@ -1,6 +1,3 @@
-// composables/useDynamicRefs.js
-import { ref, onBeforeUpdate } from 'vue'
-
 /**
  * 动态收集 v-for 元素的 ref 引用
  * @returns {Object} { refs, setRef }

@@ -16,14 +16,7 @@
     </div>
     <div class="center-container">
       <div class="nav-text-container">
-        <div class="text">
-          <p>sasahskjask</p>
-          <p>sjdhsjkdk</p>
-          <p>dkaldjaklsj</p>
-          <p>dkaldjaklsj</p>
-          <p>dkaldjaklsj</p>
-          <p>dkaldjaklsj</p>
-        </div>
+        <KeyTexts :keyTexts="keyTexts"/>
         <SlideText text="默认嘻嘻哈哈"/>
       </div>
       <div class="cube-container">
@@ -52,15 +45,17 @@
         <GuideBar/>
       </div>
     </div>
-
+    <div class="footer-container">
+      <LoopText text="jkashdjsssssssssssssssssssssssssssssssssssssssssssssssssssssssssahkjdaskaskdhkajsdkasdhkjasdhkajshdkajhdkjahksdk。"/>
+    </div>
 </div>
 </template>
 
 <script setup>
+import KeyTexts from '../components/KeyTexts.vue';
 import SlideText from '../components/SlideText.vue';
-
-
 const buttonIsOpen=ref(false)
+const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
 const closeButton=()=>{
   buttonIsOpen.value=false
 }
@@ -81,23 +76,23 @@ const closeButton=()=>{
     justify-content: center;
     align-items: center;
     gap: 10px;
-    // border: 1px solid pink;
     .nav-text-container{
       display: flex;
       flex-direction: column;
       justify-content: center;
       width: fit-content;
       height: 100%;
-      // background-color: green;
     }
     .cube-container{
-      // border: black solid 1px;
       width: min(80vmin, 700px);
       aspect-ratio: 1 / 1;
       }
-    .guide-box{
-        height: 50px;
-        width:150px;
+    .guidebar-container{
+      height: 100%;
+      width: fit-content;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       }
   }
   .button-box{
@@ -114,6 +109,14 @@ const closeButton=()=>{
       gap: 10px;
       align-items: center;
     }
+  }
+  .footer-container{
+    height: 70px;
+    width: 100%;
+    position: fixed;
+    bottom: 10px;
+    background: var(--text-color);
+    color: white;
   }
 }
 </style>

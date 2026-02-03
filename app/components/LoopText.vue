@@ -15,8 +15,6 @@
 
 <script setup>
 import gsap from 'gsap'
-import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
-
 const props = defineProps({
   text: {
     type: String,

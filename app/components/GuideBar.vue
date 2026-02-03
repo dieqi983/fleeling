@@ -20,7 +20,7 @@ const props=defineProps({
     type:Object,
     default:()=>({
       text:'默认嘻嘻嘻',
-      path:'/'
+      path:'/about'
     })
   },
   size:{

@@ -1,24 +1,5 @@
 <template>
   <div class="index-container">
-    <div class="button-box">
-      <extend-button
-      v-model="buttonIsOpen"
-      >
-      <div 
-      class="test-list"
-      >
-        <span>winter</span>
-        <span>sumer</span>
-        <span>spring</span>
-        <span>autamn</span>
-      </div>
-      </extend-button>
-    </div>
-    <div class="center-container">
-      <div class="nav-text-container">
-        <KeyTexts :keyTexts="keyTexts"/>
-        <SlideText text="默认嘻嘻哈哈"/>
-      </div>
       <div class="cube-container">
         <Cube
         :textures="[
@@ -41,82 +22,102 @@
         }"
         />
       </div>
-      <div class="guidebar-container">
-        <GuideBar/>
+    <ExtendButton class="extend-button" v-model="buttonIsOpen">
+      <div class="test-dialog"></div>
+    </ExtendButton>
+    <section class="main-container">
+        <div class="text-container">
+          <div class="text-show-container">
+            <KeyTexts :keyTexts="keyTexts"/>
+            <SlideText text="默认嘻嘻哈哈"/>
+          </div>
+          <div class="text-nav-container">
+            <GuideBar/>
+          </div>
       </div>
-    </div>
-    <div class="footer-container">
+    </section>
+    <section class="show-container">
+    <div class="loop-container">
       <LoopText text="jkashdjsssssssssssssssssssssssssssssssssssssssssssssssssssssssssahkjdaskaskdhkajsdkasdhkjasdhkajshdkajhdkjahksdk。"/>
     </div>
-</div>
+    </section>
+  </div>
 </template>
 
 <script setup>
-import KeyTexts from '../components/KeyTexts.vue';
-import SlideText from '../components/SlideText.vue';
 const buttonIsOpen=ref(false)
 const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
-const closeButton=()=>{
-  buttonIsOpen.value=false
-}
-
 </script>
 
 <style lang="scss" scoped>
 .index-container{
-  width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .center-container{
-    height: 80vh;
+  width: 100%;
+  .extend-button{
+    position: fixed;
+    top: 5vh;
+    right:5vw;
+    z-index: 2000;
+    .test-dialog{
+      height: 500px;
+      width: 200px;
+    }
+  }
+  .cube-container{
+    width: min(80vmin, 700px);
+    aspect-ratio: 1 / 1;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .main-container{
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    .nav-text-container{
+    .text-container{
+      height: 50%;
+      width: 100%;
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      width: fit-content;
-      height: 100%;
-    }
-    .cube-container{
-      width: min(80vmin, 700px);
-      aspect-ratio: 1 / 1;
-      }
-    .guidebar-container{
-      height: 100%;
-      width: fit-content;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      }
-  }
-  .button-box{
-  position: fixed;
-  top: 5vh;
-  right:5vw;
-  z-index: 2000;
-    .test-list{
-      color: white;
-      display: flex;
-      font-size: 30px;
-      padding: 10px;
-      flex-direction: column;
-      gap: 10px;
       align-items: center;
+      gap: 45vw;
+      .text-show-container{
+        z-index: 1000;
+      }
+      .text-nav-container{
+        z-index: 1000;
+      }
     }
   }
-  .footer-container{
-    height: 70px;
+  .show-container{
+    position: absolute;
+    height: 100%;
     width: 100%;
-    position: fixed;
-    bottom: 10px;
-    background: var(--text-color);
-    color: white;
+    isolation: isolate;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0.5; 
+      pointer-events: none; 
+      z-index: -1; 
+    }
+    .loop-container{
+      top: 0px;
+      height: 70px;
+      width: 100%;
+      position: absolute;
+      background: var(--text-color);
+      color: white;
+    }
   }
 }
+
 </style>

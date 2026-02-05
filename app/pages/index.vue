@@ -36,10 +36,13 @@
           </div>
       </div>
     </section>
-    <section class="show-container">
     <div class="loop-container">
       <LoopText text="jkashdjsssssssssssssssssssssssssssssssssssssssssssssssssssssssssahkjdaskaskdhkajsdkasdhkjasdhkajshdkajhdkjahksdk。"/>
     </div>
+    <section class="show-container">
+      <div class="img-container">
+        <DrawShow path="https://www.amanation-official.com/wp-content/uploads/2025/12/REINE_img.jpg.webp"/>
+      </div>
     </section>
   </div>
 </template>
@@ -78,6 +81,7 @@ const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
     justify-content: center;
     align-items: center;
     .text-container{
+      padding:20vh 0 0 3vw ;
       height: 50%;
       width: 100%;
       display: flex;
@@ -92,11 +96,22 @@ const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
       }
     }
   }
+  .loop-container{
+    height: 70px;
+    width: 100%;
+    background: var(--text-color);
+    color: white;
+    z-index: 100;
+    position: relative;
+  }
   .show-container{
-    position: absolute;
+    position: relative;
     height: 100%;
     width: 100%;
     isolation: isolate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &::before {
       content: '';
       position: absolute;
@@ -109,13 +124,9 @@ const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
       pointer-events: none; 
       z-index: -1; 
     }
-    .loop-container{
-      top: 0px;
-      height: 70px;
-      width: 100%;
-      position: absolute;
-      background: var(--text-color);
-      color: white;
+    .img-container{
+      height: 400px;
+      width: 600px;
     }
   }
 }

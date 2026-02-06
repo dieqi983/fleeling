@@ -21,10 +21,13 @@ const props=defineProps({
   width: 100%;
   position: relative;
   overflow: hidden; 
+  transform: scale(1);
+  transition: all 0.3s ease;
   &:hover{
     .move-bar{
       animation: twinkle ease-in-out 0.3s forwards;
     }
+    transform: scale(1.1);
   }
   
   img{
@@ -56,7 +59,7 @@ const props=defineProps({
       transform-origin: left center;
     }
     51%{
-      transform-origin: right center; /* 关键：在中间切换原点 */
+      transform-origin: right center; 
     }
     100%{
       transform: scaleX(0);

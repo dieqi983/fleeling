@@ -28,7 +28,6 @@
     <section class="main-container">
         <div class="text-container">
           <div class="text-show-container">
-            <KeyTexts :keyTexts="keyTexts"/>
             <SlideText text="默认嘻嘻哈哈"/>
           </div>
           <div class="text-nav-container">
@@ -39,17 +38,55 @@
     <div class="loop-container">
       <LoopText text="jkashdjsssssssssssssssssssssssssssssssssssssssssssssssssssssssssahkjdaskaskdhkajsdkasdhkjasdhkajshdkajhdkjahksdk。"/>
     </div>
-    <section class="show-container">
-      <div class="img-container">
-        <DrawShow path="https://www.amanation-official.com/wp-content/uploads/2025/12/REINE_img.jpg.webp"/>
+    <section class="show-container" ref="containerRef">
+      <div class="show-scroll-container" ref="scrollContentRef">
+        <div>
+          <HomeShowContainer/>
+        </div>
+        <div style="background-color: aqua;"></div>
+        <div></div>
       </div>
+    </section>
+    <section class="footer-container">
+
     </section>
   </div>
 </template>
 
 <script setup>
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
 const buttonIsOpen=ref(false)
-const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
+const containerRef=ref(null)
+const scrollContentRef=ref(null)
+const horizontalScroll=()=>{
+  const container=containerRef.value
+  const scrollContent=scrollContentRef.value
+  const slideCount=scrollContent.children.length
+    // 设置总宽度
+  gsap.set(scrollContent, {
+    width: `${slideCount * 100}vw`
+  })
+  
+  // 创建水平滚动
+  gsap.to(scrollContent, {
+    x: () => -((slideCount - 1) * 100) + 'vw',
+    ease: 'none',
+    scrollTrigger: {
+      trigger: container,
+      start: 'top top',
+      end: () => `+=${scrollContent.clientWidth}`,
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1
+    }
+  })
+}
+onMounted(async() => {
+  gsap.registerPlugin(ScrollTrigger)
+  await nextTick()
+  horizontalScroll()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -81,7 +118,7 @@ const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
     justify-content: center;
     align-items: center;
     .text-container{
-      padding:20vh 0 0 3vw ;
+      padding:0 0 0 3vw ;
       height: 50%;
       width: 100%;
       display: flex;
@@ -105,13 +142,15 @@ const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
     position: relative;
   }
   .show-container{
-    position: relative;
-    height: 100%;
-    width: 100%;
-    isolation: isolate;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  height: 100%; 
+  width: 100%; 
+  isolation: isolate;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+  .show-scroll-container{
     &::before {
       content: '';
       position: absolute;
@@ -124,10 +163,22 @@ const keyTexts=['你好，FLEE','这里是FLEE','哈哈哈']
       pointer-events: none; 
       z-index: -1; 
     }
-    .img-container{
-      height: 400px;
-      width: 600px;
+    height: 100%; 
+    display: flex; 
+    position: relative;
+    flex-shrink: 0;
+    
+    & > div{
+      flex: 0 0 100vw;
+      height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+      }
     }
+  }
+  .footer-container{
+    height: 100%;
+    width: 100%;
   }
 }
 

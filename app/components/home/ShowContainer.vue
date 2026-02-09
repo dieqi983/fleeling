@@ -1,6 +1,10 @@
 <template>
   <div class="show-container">
-    <div class="show-inside"></div>
+    <div class="show-inside">
+      <div class="carousel-container">
+        <Carousel/>
+      </div>
+    </div>
     <div class="img-text-container">
       <div class="img-container">
         <DrawShow/>
@@ -15,9 +19,15 @@
     userInfo:{
       type:Object,
       default:()=>({
-        userProfile:'',
         userName:'',
-        userArea:'',
+        Email:'',
+      })
+    },
+    drawInfo:{
+      type:Object,
+      default:()=>({
+        drawPath:'',
+        drawIntroduction:'',
       })
     }
   })
@@ -31,7 +41,14 @@
   .show-inside{
     height: 100%;
     width: 30%;
-    border: 1px black solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .carousel-container{
+      height: 40%;
+      width: 100%;
+      transform: translateX(3vw);
+    }
   }
   .img-text-container{
   flex: 1;

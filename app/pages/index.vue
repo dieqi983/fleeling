@@ -40,11 +40,16 @@
     </div>
     <section class="show-container" ref="containerRef">
       <div class="show-scroll-container" ref="scrollContentRef">
-        <div>
-          <HomeShowContainer/>
+        <div
+          v-for="(item,index) in showInfo"
+          :key="index"
+        >
+          <HomeShowContainer 
+          :path="item.path"
+          :userInfo="item.userInfo"
+          :drawInfo="item.drawInfo"
+          />
         </div>
-        <div style="background-color: aqua;"></div>
-        <div></div>
       </div>
     </section>
     <section class="footer-container">
@@ -56,6 +61,7 @@
 <script setup>
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
+import { ref } from 'vue'
 const buttonIsOpen=ref(false)
 const containerRef=ref(null)
 const scrollContentRef=ref(null)
@@ -87,6 +93,108 @@ onMounted(async() => {
   await nextTick()
   horizontalScroll()
 })
+const showInfo=ref([
+  {
+    path:'/',
+    userInfo:{
+      userName:'蝶祈',
+      likeTotal:20,
+    },
+    drawInfo:[
+      {
+        path:'/textures/1.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/2.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/3.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/4.jpg',
+        descript:'新时代的帆船不枉回开',
+      }
+    ]
+  },
+  {
+    path:'/',
+    userInfo:{
+      userName:'蝶祈',
+      likeTotal:20,
+    },
+    drawInfo:[
+      {
+        path:'/textures/1.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/2.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/3.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/4.jpg',
+        descript:'新时代的帆船不枉回开',
+      }
+    ]
+  },
+  {
+    path:'/',
+    userInfo:{
+      userName:'蝶祈',
+      likeTotal:20,
+    },
+    drawInfo:[
+      {
+        path:'/textures/1.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/2.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/3.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/4.jpg',
+        descript:'新时代的帆船不枉回开',
+      }
+    ]
+  },
+  {
+    path:'/',
+    userInfo:{
+      userName:'蝶祈',
+      likeTotal:20,
+    },
+    drawInfo:[
+      {
+        path:'/textures/1.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/2.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/3.jpg',
+        descript:'新时代的帆船不枉回开',
+      },
+      {
+        path:'/textures/4.jpg',
+        descript:'新时代的帆船不枉回开',
+      }
+    ]
+  }
+])
 </script>
 
 <style lang="scss" scoped>

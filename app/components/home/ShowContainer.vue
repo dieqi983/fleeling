@@ -2,8 +2,12 @@
   <div class="show-container">
     <div class="show-inside">
       <div class="carousel-container">
-        <Carousel :imgs="otherImgPaths"/>
+        <Carousel 
+        :imgs="otherImgPaths"
+        @imgChange="handleTextChange"
+        />
       </div>
+      <SlideText :text="descriptText"/>
     </div>
     <div class="img-text-container">
       <div class="img-container">
@@ -48,6 +52,10 @@ import { computed } from 'vue';
       ]
     }
   })
+  const descriptText=ref('')
+  const handleTextChange=($event)=>{
+    descriptText.value=$event
+  }
   const naviInfo=computed(()=>{
     return {
       text:props.userInfo.userName,
@@ -62,8 +70,7 @@ import { computed } from 'vue';
   })
   const otherImgPaths=computed(()=>{
     const otherImgInfos = props.drawInfo.slice(1)
-    const paths=otherImgInfos.map(imgInfo=>imgInfo.path)
-    return paths
+    return otherImgInfos
   })
 </script>
 
@@ -76,12 +83,14 @@ import { computed } from 'vue';
     height: 100%;
     width: 30%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
+    padding-left:3vw ;
     .carousel-container{
       height: 40%;
       width: 100%;
-      transform: translateX(3vw);
     }
   }
   .img-text-container{

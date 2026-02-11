@@ -1,24 +1,13 @@
 <template>
   <div class="about-container">
-    <TurnPage :totalPages="3">
-      <template #page0>
-        <div style="background-color: aquamarine;height: 100%; width: 100%;">
-        </div>
-      </template>
-      <template #page1>
-        <div style="background-color: pink; height: 100%; width: 100%;">
-        </div>
-      </template>
-      <template #page2>
-        <div style="background-color: red; height: 100%; width: 100%;">
-        </div>
-      </template>
-    </TurnPage>
+    <h1>about</h1>
+    <div style="height: 100px;width: 300px;">
+      <UserShowInfo/>
+    </div>
   </div>
 </template>
 
 <script setup>
-
 </script>
 
 <style lang="scss" scoped>

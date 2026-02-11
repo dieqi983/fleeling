@@ -220,7 +220,6 @@ defineExpose({
 .text-switcher {
   display: inline-grid;
   grid-template-areas: "content";
-  font-family: 'Arial', sans-serif;
   font-size: var(--text-size-md);
   color:var(--text-color);
   user-select: none;

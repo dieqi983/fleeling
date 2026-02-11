@@ -11,22 +11,27 @@
       <div 
         class="img-box" 
         v-for="(item,index) in props.imgs"
-        :key="item+index"
+        :key="item.path+index"
       >
-        <img :src="item" alt="">
+        <img :src="item.path" alt="">
       </div>
     </div>
   </div>  
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useMousePosition } from '../composables/useMousePosition';
 
 const props = defineProps({
   imgs: {
     type: Array,
-    default: () => [],
+    default: () => [
+      {
+        path:'',
+        descript:'',
+      }
+    ],
   }
 })
 
@@ -68,6 +73,10 @@ onMounted(() => {
     showWindowWidth.value = showWindowRef.value.clientWidth
   })
 })
+const emit=defineEmits(['imgChange'])
+watch(currentIndex,()=>{
+  emit('imgChange',props.imgs[currentIndex.value].descript)
+},{immediate:true})
 </script>
 
 <style lang="scss" scoped>

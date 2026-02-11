@@ -107,15 +107,15 @@ const showInfo=ref([
       },
       {
         path:'/textures/2.jpg',
-        descript:'新时代的帆船不枉回开',
+        descript:'我是无敌joker',
       },
       {
         path:'/textures/3.jpg',
-        descript:'新时代的帆船不枉回开',
+        descript:'今天是个好天气',
       },
       {
         path:'/textures/4.jpg',
-        descript:'新时代的帆船不枉回开',
+        descript:'好想放假啊',
       }
     ]
   },

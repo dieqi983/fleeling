@@ -7,9 +7,9 @@
     </div>
     <div class="info-box">
         <span class="username">蝶祈</span>
-        <div class="othen-info">
-          <span>12</span>
-          <IconText/>
+        <div class="other-info">
+          <IconText iconType="like" text="12"/>
+          <IconText iconType="address" text="重庆"/>
       </div>
     </div>
   </div>
@@ -30,7 +30,7 @@
     width: auto;
     height: 100%; 
     aspect-ratio: 1 / 1; 
-    border-right: 1px solid black;
+    border-right: 1px solid var(--text-un-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,8 +50,9 @@
       color: var(--text-un-color);
       font-size: var(--text-size-md);
     }
-    .othen-info{
-
+    .other-info{
+      display: flex;
+      gap: 15px;
     }
   }
 }

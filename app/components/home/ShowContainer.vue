@@ -1,6 +1,9 @@
 <template>
   <div class="show-container">
     <div class="show-inside">
+      <div class="userinfo-container">
+        <UserShowInfo/>
+      </div>
       <div class="carousel-container">
         <Carousel 
         :imgs="otherImgPaths"
@@ -88,6 +91,11 @@ import { computed } from 'vue';
     align-items: center;
     gap: 20px;
     padding-left:3vw ;
+    .userinfo-container{
+      height: 15%;
+      width: 80%;
+      margin-bottom: 5vh;
+    }
     .carousel-container{
       height: 40%;
       width: 100%;

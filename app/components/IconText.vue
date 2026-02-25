@@ -1,14 +1,27 @@
 <template>
   <div class="icon-text-container">
     <div class="icon-box">
-      <img :src="addrIcon" alt="">
+      <img :src="iconSrc" alt="">
     </div>
-      <span>重庆</span>
+      <span>{{props.text}}</span>
   </div>
 </template>
 
 <script setup>
-import addrIcon from '../assets/icons/address.svg'
+
+const props=defineProps({
+  iconType:{
+    type:String,
+    required:true,
+  },
+  text:{
+    type:String,
+    required:true,
+  }
+})
+const iconSrc=computed(()=>{
+  return `/icons/${props.iconType}.svg`
+})
 </script>
 
 <style lang="scss" scoped>
@@ -16,9 +29,10 @@ import addrIcon from '../assets/icons/address.svg'
   display: flex;
   color: var(--text-un-color);
   align-items: center;
+  justify-content: center;
   .icon-box{
-    height:clamp(1rem, 2vw, 1.3rem);
-    width: clamp(1rem, 2vw, 1.3rem);
+    height:clamp(1.2rem, 2vw, 1.3rem);
+    width: clamp(1.2rem, 2vw, 1.3rem);
     img{
       height: 100%;
       width: 100%;

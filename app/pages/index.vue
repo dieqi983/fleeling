@@ -1,5 +1,8 @@
 <template>
   <div class="index-container">
+      <div class="site-title-box" ref="siteTitleRef">
+        <span class="site-title">FLEELING</span>
+      </div>
       <div class="cube-container">
         <Cube
         :textures="[
@@ -35,7 +38,7 @@
           </div>
       </div>
     </section>
-    <div class="loop-container">
+    <div class="loop-container" ref="loopContainer">
       <LoopText text="jkashdjsssssssssssssssssssssssssssssssssssssssssssssssssssssssssahkjdaskaskdhkajsdkasdhkjasdhkajshdkajhdkjahksdk。"/>
     </div>
     <section class="show-container" ref="containerRef">
@@ -61,20 +64,24 @@
 <script setup>
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
-import { ref } from 'vue'
-const buttonIsOpen=ref(false)
-const containerRef=ref(null)
-const scrollContentRef=ref(null)
-const horizontalScroll=()=>{
-  const container=containerRef.value
-  const scrollContent=scrollContentRef.value
-  const slideCount=scrollContent.children.length
-    // 设置总宽度
+
+const buttonIsOpen = ref(false)
+const containerRef = ref(null)
+const scrollContentRef = ref(null)
+const siteTitleRef = ref(null)
+const loopContainer = ref(null)
+
+let ctx
+
+const horizontalScroll = () => {
+  const container = containerRef.value
+  const scrollContent = scrollContentRef.value
+  const slideCount = scrollContent.children.length
+  
   gsap.set(scrollContent, {
     width: `${slideCount * 100}vw`
   })
   
-  // 创建水平滚动
   gsap.to(scrollContent, {
     x: () => -((slideCount - 1) * 100) + 'vw',
     ease: 'none',
@@ -88,10 +95,39 @@ const horizontalScroll=()=>{
     }
   })
 }
+
+const titleScrollAnimation = () => {
+  if (!loopContainer.value || !siteTitleRef.value) return
+
+  gsap.to(siteTitleRef.value, {
+    scale: 0, 
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: loopContainer.value,
+      start: 'top 50%', 
+      end: 'top 0%', 
+      scrub: 1,        
+      toggleActions: 'play reverse play reverse', 
+    }
+  })
+}
+
 onMounted(async() => {
   gsap.registerPlugin(ScrollTrigger)
   await nextTick()
-  horizontalScroll()
+  
+
+  ctx = gsap.context(() => {
+    horizontalScroll()
+    titleScrollAnimation()
+  })
+})
+
+
+onUnmounted(() => {
+  if (ctx) {
+    ctx.revert() 
+  }
 })
 const showInfo=ref([
   {
@@ -201,11 +237,24 @@ const showInfo=ref([
 .index-container{
   height: 100%;
   width: 100%;
+  position: absolute;
+  .site-title-box{
+    position: fixed;
+    z-index: 2000;
+    top: 6vh; 
+    left: 3vw;
+    line-height: 0.5; 
+  }
+  .site-title{
+    font-size: clamp(50px, 10vw, 100px);
+  }
   .extend-button{
     position: fixed;
     top: 5vh;
     right:5vw;
     z-index: 2000;
+    line-height: 1;
+
     .test-dialog{
       height: 500px;
       width: 200px;

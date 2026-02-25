@@ -1,8 +1,8 @@
 <template>
   <div class="about-container">
     <h1>about</h1>
-    <div style="height: 100px;width: 300px;">
-      <UserShowInfo/>
+    <div class="music-test">
+      <musicController/>
     </div>
   </div>
 </template>
@@ -14,5 +14,12 @@
 .about-container{
   height: 100%;
   width: 100%;
+  .music-test{
+    height: 100px;
+    width: 100%;
+    background-color: orange;
+    position: fixed;
+    bottom: 0;
+  }
 }
 </style>

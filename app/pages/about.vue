@@ -2,7 +2,7 @@
   <div class="about-container">
     <h1>about</h1>
     <div class="music-test">
-      <musicController/>
+      <MusicController/>
     </div>
   </div>
 </template>
@@ -20,6 +20,6 @@
     background-color: orange;
     position: fixed;
     bottom: 0;
-  }
+  } 
 }
 </style>

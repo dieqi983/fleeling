@@ -8,6 +8,9 @@
     >
       <span class="prompt-text">{{props.promptText}}</span>
     </div>
+    <div class="popover">
+
+    </div>
   </div>
 </template>
 
@@ -72,6 +75,25 @@ watch(isInside, (newVal) => {
     animation: delayedShow 0.3s ease 0.3s forwards;
     .prompt-text{
       font-size: var(--prompt-text);
+    }
+  }
+  .popover{
+    height: 100px;
+    width: 80px;
+    background-color: black;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: black transparent transparent transparent;
     }
   }
 }

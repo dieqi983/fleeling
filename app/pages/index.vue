@@ -28,6 +28,9 @@
     <ExtendButton class="extend-button" v-model="buttonIsOpen">
       <div class="test-dialog"></div>
     </ExtendButton>
+    <div class="music-footer">
+      <MusicController/>
+    </div>
     <section class="main-container">
         <div class="text-container">
           <div class="text-show-container">
@@ -267,6 +270,12 @@ const showInfo=ref([
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
+  }
+  .music-footer{
+    height: 100px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
   }
   .main-container{
     height: 100%;

@@ -1,49 +1,159 @@
 <template>
-    <div class="process-bar">
+    <div 
+      class="process-bar" 
+      ref="progressBarRef"
+      @mousedown="handleBarMousedown"
+      :style="{
+        height: barHeight,
+      }"
+    >
       <div class="process-fill"></div>
-      <div class="progress-thumb"></div>
+      <div 
+        v-if="props.hasDrag"
+        class="progress-thumb"
+        @mousedown="handleThumbMousedown"
+      >
+      </div>
     </div>
 </template>
 
 <script setup>
-  const props=defineProps({
-    currentValue:{
-      type:Number,
-      default:0,
-    },
-    maxValue:{
-      type:Number,
-      default:100,
-    }
-  })
-  const fillWidth=computed(()=>{
-    return (props.currentValue/props.maxValue)*100+'%'
-  })  
+import { ref, computed, onUnmounted } from 'vue'
+
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: 0,
+  },
+  maxValue: {
+    type: Number,
+    default: 100,
+  },
+  hasDrag: {
+    type: Boolean,
+    default: true,
+  },
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value) // 添加验证
+  }
+})
+
+const barHeight = computed(() => {
+  if (props.size === 'sm') return '5px'
+  if (props.size === 'md') return '7px'
+  if (props.size === 'lg') return '10px'
+})
+
+const emit = defineEmits(['update:modelValue', 'drag-start', 'drag-end'])
+
+const progressBarRef = ref(null)
+const isDragging = ref(false)
+
+const fillWidth = computed(() => {
+  return (props.modelValue / props.maxValue) * 100 + '%'
+})
+
+// 计算点击/拖拽位置对应的值
+const calculateValueFromPosition = (clientX) => {
+  if (!progressBarRef.value) return props.modelValue
+  
+  const rect = progressBarRef.value.getBoundingClientRect()
+  let percentage = (clientX - rect.left) / rect.width
+  
+  // 限制在 0-1 之间
+  percentage = Math.max(0, Math.min(1, percentage))
+  
+  return percentage * props.maxValue
+}
+
+// 更新进度条值
+const updateProgress = (clientX) => {
+  const newValue = calculateValueFromPosition(clientX)
+  emit('update:modelValue', Math.round(newValue))
+}
+
+// 处理进度条点击
+const handleBarMousedown = (e) => {
+  if (props.hasDrag) {
+    updateProgress(e.clientX)
+  }
+}
+
+// 处理滑块拖拽开始
+const handleThumbMousedown = (e) => {
+  e.stopPropagation()
+  e.preventDefault() 
+  
+  isDragging.value = true
+  emit('drag-start', props.modelValue)
+  
+  window.addEventListener('mousemove', handleMousemove)
+  window.addEventListener('mouseup', handleMouseup)
+  
+  // 添加拖拽时的样式类
+  document.body.style.userSelect = 'none'
+}
+
+const handleMousemove = (e) => {
+  if (!isDragging.value) return
+  
+  e.preventDefault()
+  updateProgress(e.clientX)
+}
+
+const handleMouseup = () => {
+  if (isDragging.value) {
+    isDragging.value = false
+    emit('drag-end', props.modelValue)
+    
+    window.removeEventListener('mousemove', handleMousemove)
+    window.removeEventListener('mouseup', handleMouseup)
+    
+    // 移除拖拽时的样式
+    document.body.style.userSelect = ''
+  }
+}
+
+// 组件卸载时清理事件监听
+onUnmounted(() => {
+  if (isDragging.value) {
+    window.removeEventListener('mousemove', handleMousemove)
+    window.removeEventListener('mouseup', handleMouseup)
+    document.body.style.userSelect = ''
+  }
+})
 </script>
 
 <style scoped lang="scss">
-.process-bar{
-  height: 5px;
-  width: 400px;
-  border-radius: 2px;
-  background-color: white;
+.process-bar {
+  background-color: var(--text-color);
+  width: 100%;
   position: relative;
-  .process-fill{
-    background-color: black;
+  
+  .process-fill {
+    background-color: var(--button-bg-color);
     width: v-bind(fillWidth);
-    border-radius: 2px;
     height: 100%;
+    pointer-events: none;
   }
-  .progress-thumb{
+  
+  .progress-thumb {
     position: absolute;
     width: auto;
     height: 200%;
-    aspect-ratio: 1 / 1; 
-    background-color: black;
+    aspect-ratio: 1 / 1;
+    background-color: var(--button-bg-color);
     border-radius: 50%;
     top: -50%;
     transform: translateX(-50%);
-    left:v-bind(fillWidth)
+    left: v-bind(fillWidth);
+    transition: transform 0.1s ease;
+    
+    &:hover {
+      transform: translateX(-50%) scale(1.2);
+    }
   }
 }
 </style>

@@ -1,15 +1,29 @@
 <template>
-  <div ref="iconRef" class="promptIcon-container">
-    <img :src="iconPath" alt="">
+  <div ref="iconRef"
+   class="promptIcon-container"
+   v-click-outside="clickOutHandler"
+   >
+    <img 
+    :src="iconPath" 
+    alt=""
+    @click="handleClick"
+    >
     <div 
+      v-if="props.status==='prompt' || props.status==='all'"
       v-show="isInside" 
       class="prompt-box"
       :class="{ 'visible': isInside }"
     >
       <span class="prompt-text">{{props.promptText}}</span>
     </div>
-    <div class="popover">
-
+    <div 
+    class="popover"
+    v-if="props.status==='popover' || props.status==='all'"
+    v-show="isPopUp"
+    >
+    <div class="popover-content">
+      <slot></slot>
+    </div>
     </div>
   </div>
 </template>
@@ -18,6 +32,7 @@
 
 const promptTop = ref(0)
 const promptLeft = ref(0)
+const isPopUp=ref(false)
 const props = defineProps({
   iconType: {
     type: String,
@@ -26,9 +41,19 @@ const props = defineProps({
   promptText:{
     type:String,
     default:'提示词',
+  },
+  status:{
+    type:String,
+    default:'prompt',
+    validator: (value) => ['prompt', 'popover', 'all'].includes(value) 
   }
 })
-
+const handleClick=()=>{
+  isPopUp.value=true
+}
+const clickOutHandler=()=>{
+  isPopUp.value=false
+}
 const iconPath = computed(() => {
   return `/icons/${props.iconType}.svg`
 })
@@ -78,13 +103,16 @@ watch(isInside, (newVal) => {
     }
   }
   .popover{
-    height: 100px;
-    width: 80px;
+    padding: 1vw;
+    border-radius:5px ;
     background-color: black;
     position: absolute;
     bottom: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     &::after {
       content: '';
       position: absolute;

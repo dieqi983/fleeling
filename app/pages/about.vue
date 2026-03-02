@@ -2,7 +2,11 @@
   <div class="about-container">
     <h1>about</h1>
     <div class="icontest">
-      <PromptIcon iconType="like"/>
+      <PromptIcon iconType="like" status="all">
+        <template #default>
+          <div class="content-test"></div>
+        </template>
+      </PromptIcon>
     </div>
     <div class="music-test">
       <MusicController/>
@@ -26,6 +30,11 @@ import PromptIcon from '../components/PromptIcon.vue';
     height: 30px;
     width: 30px;
     background-color: orange;
+    .content-test{
+      height: 100px;
+      width: 30px;
+      background-color: aliceblue;
+    }
   }
   .music-test{
     height: 100px;

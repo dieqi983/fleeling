@@ -2,7 +2,7 @@
     <div 
       class="process-bar" 
       ref="progressBarRef"
-      @mousedown="handleBarMousedown"
+      @click="handleBarClick"
       :style="{
         height: barHeight,
       }"
@@ -46,7 +46,7 @@ const barHeight = computed(() => {
   if (props.size === 'lg') return '10px'
 })
 
-const emit = defineEmits(['update:modelValue', 'drag-start', 'drag-end'])
+const emit = defineEmits(['update:modelValue', 'drag-start', 'drag-end','clickBar'])
 
 const progressBarRef = ref(null)
 const isDragging = ref(false)
@@ -71,13 +71,16 @@ const calculateValueFromPosition = (clientX) => {
 // 更新进度条值
 const updateProgress = (clientX) => {
   const newValue = calculateValueFromPosition(clientX)
-  emit('update:modelValue', Math.round(newValue))
+  const roundedValue=Math.round(newValue)
+  emit('update:modelValue', roundedValue)
+  return roundedValue
 }
 
 // 处理进度条点击
-const handleBarMousedown = (e) => {
+const handleBarClick = (e) => {
   if (props.hasDrag) {
-    updateProgress(e.clientX)
+    const newValue=updateProgress(e.clientX)
+    emit('clickBar',newValue)
   }
 }
 

@@ -29,7 +29,7 @@
       <div class="test-dialog"></div>
     </ExtendButton>
     <div class="music-footer">
-      <MusicController/>
+      <MusicController :musicList="musicList"/>
     </div>
     <section class="main-container">
         <div class="text-container">
@@ -232,6 +232,20 @@ const showInfo=ref([
         descript:'新时代的帆船不枉回开',
       }
     ]
+  }
+])
+const musicList=ref([
+  {
+    url:'/mp3/bird.mp3',
+    pic:'/textures/1.jpg',
+    singer:'jiegeng',
+    name:'bird',
+  },
+  {
+    url:'/mp3/cang.mp3',
+    pic:'/textures/2.jpg',
+    singer:'jiegeng',
+    name:'cang',
   }
 ])
 </script>

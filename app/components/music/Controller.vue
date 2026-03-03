@@ -1,6 +1,11 @@
 <template>
   <div class="music-controller">
-    <audio src=""/>
+    <audio 
+    ref="audioRef" 
+    :src="currentPlayMusic"
+    @ended="onEnded"
+    @timeupdate="onTimeupdate"
+    />
     <div class="music-info-container">
       <div class="pic-container">
         <Profile path="/textures/5.jpg"/>
@@ -31,7 +36,7 @@
             <PromptIcon iconType="previous" status="all"/>
           </div>
           <div class="pause">
-            <PromptIcon iconType="pause" status="all"/>
+            <PromptIcon iconType="pause" status="all" @click="play"/>
           </div>
           <div class="next">
             <PromptIcon iconType="next" status="all"/>
@@ -42,15 +47,18 @@
         </div>
       </div>
       <div class="process-bar-container">
-          <span class="time-text">{{ formatTime(currentValue) }}</span>
+          <span class="time-text">{{ formatTime(currentTime) }}</span>
           <div class="progress-wrapper">
             <ProcessBar 
-              v-model="currentValue"
-              :maxValue="120"
+              v-model="currentTime"
+              :maxValue="duration"
               size="sm"
+              @drag-start="onDragStart"
+              @drag-end="onDragEnd"
+              @clickBar="clickBarHandler"
             />
           </div>
-          <span class="time-text">{{ formatTime(120) }}</span>
+          <span class="time-text">{{formatTime(duration)}}</span>
       </div>
     </div>
     <div class="other-handle-container">
@@ -71,13 +79,57 @@
 </template>
 
 <script setup>
-const currentValue = ref(120)
+import { ref } from 'vue'
+
+const currentTime = ref(0)
+const duration = ref(0)
+const audioRef=ref(null)
+const isDragging=ref(false)
 const props=defineProps({
   musicList:{
     type:Array,
     default:()=>[],
   }
 })
+const currentMusicIndex=ref(0)
+const currentPlayMusic=computed(()=>{
+  return props.musicList[currentMusicIndex.value].url
+})
+const onEnded=()=>{
+  if(currentMusicIndex.value>=props.musicList.length-1){
+    currentMusicIndex.value=0
+  }
+  else{
+    currentMusicIndex.value++
+  }
+}
+const onTimeupdate=(e)=>{
+  if(!isDragging.value){
+    currentTime.value = e.target.currentTime
+  }
+}
+const clickBarHandler=(e)=>{
+  if(!isDragging.value){
+    audioRef.value.currentTime=e
+  }
+}
+const onDragStart = (value) => {
+  // 开始拖拽
+  isDragging.value = true
+}
+
+const onDragEnd = (value) => {
+  // 结束拖拽，执行跳转
+  isDragging.value = false
+  
+  const audio = audioRef.value
+  if (audio) {
+    audio.currentTime = value
+  }
+}
+const play=()=>{
+  audioRef.value.play() 
+}
 //处理播放方式逻辑
 
 //处理音乐收藏逻辑
@@ -90,6 +142,20 @@ const formatTime = (seconds) => {
   const secs = Math.floor(seconds % 60)
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
+onMounted(() => {
+  const audio = audioRef.value
+  if (audio) {
+    // 如果已经有 duration，直接获取
+    if (audio.duration) {
+      duration.value = audio.duration
+    }
+    
+    // 同时监听事件（处理网络加载的情况）
+    audio.addEventListener('loadedmetadata', (e) => {
+      duration.value = e.target.duration
+    })
+  }
+})
 </script>
 
 <style lang="scss" scoped>

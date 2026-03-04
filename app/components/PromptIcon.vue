@@ -103,9 +103,9 @@ watch(isInside, (newVal) => {
     }
   }
   .popover{
-    padding: 1vw;
+    padding: 8px;
     border-radius:5px ;
-    background-color: black;
+    background-color:var(--button-bg-color);
     position: absolute;
     bottom: calc(100% + 10px);
     left: 50%;
@@ -121,7 +121,7 @@ watch(isInside, (newVal) => {
       transform: translateX(-50%);
       border-width: 6px;
       border-style: solid;
-      border-color: black transparent transparent transparent;
+      border-color: var(--button-bg-color) transparent transparent transparent;
     }
   }
 }

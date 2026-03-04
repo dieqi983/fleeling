@@ -5,6 +5,8 @@
     :src="currentPlayMusic"
     @ended="onEnded"
     @timeupdate="onTimeupdate"
+    @play="isPlaying=true"
+    @pause="isPlaying=false"
     />
     <div class="music-info-container">
       <div class="pic-container">
@@ -18,28 +20,32 @@
     <div class="music-control-container">
       <div class="widget-container">
         <div class="playmode-container">
-          <PromptIcon iconType="loop" status="all">
+          <PromptIcon :iconType="playMode" status="all">
             <template #default>
               <div class="mode-option-container">
-                <div class="loopplay-container">
-                  <span>循环播放</span>
-                </div>
-                <div class="listplay-container">
-                  <span>列表播放</span>
-                </div>
+                  <IconText 
+                  icon-type="arrow-right" 
+                  text="循环播放"
+                  @click="playMode='oneloop'"
+                  />
+                  <IconText 
+                  icon-type="arrow-right" 
+                  text="列表播放"
+                  @click="playMode='listloop'"
+                  />
               </div>
             </template>
           </PromptIcon>
         </div>
         <div class="main-control-container">
           <div class="previous">
-            <PromptIcon iconType="previous" status="all"/>
+            <PromptIcon iconType="previous" @click="turnPrevious"/>
           </div>
           <div class="pause">
-            <PromptIcon iconType="pause" status="all" @click="play"/>
+            <PromptIcon :iconType="isPlaying?'pause':'play'" @click="controlPlay"/>
           </div>
           <div class="next">
-            <PromptIcon iconType="next" status="all"/>
+            <PromptIcon iconType="next" @click="turnNext"/>
           </div>
         </div>
         <div class="volume-container">
@@ -79,12 +85,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
+import IconText from '../IconText.vue'
 
-const currentTime = ref(0)
-const duration = ref(0)
 const audioRef=ref(null)
-const isDragging=ref(false)
 const props=defineProps({
   musicList:{
     type:Array,
@@ -92,17 +96,67 @@ const props=defineProps({
   }
 })
 const currentMusicIndex=ref(0)
+const isPlaying=ref(false)
+//播放方式状态
+const playMode=ref('listloop')
 const currentPlayMusic=computed(()=>{
   return props.musicList[currentMusicIndex.value].url
 })
-const onEnded=()=>{
-  if(currentMusicIndex.value>=props.musicList.length-1){
-    currentMusicIndex.value=0
-  }
-  else{
-    currentMusicIndex.value++
+const controlPlay=async ()=>{
+  const audio = audioRef.value
+  try {
+    if (audio.paused) {
+      await audio.play()
+    } else {
+      audio.pause()
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      console.error('播放失败:', error)
+    }
   }
 }
+const safePlay=()=>{
+  audioRef.value.addEventListener('canplay',()=>{
+    audioRef.value.play()
+  },{ once: true })
+}
+const onEnded= async()=>{
+  isPlaying.value=false
+  if(playMode.value==='listloop'){
+    if(currentMusicIndex.value>=props.musicList.length-1){
+      currentMusicIndex.value=0
+    }
+    else{
+      currentMusicIndex.value++
+    }
+    await nextTick()
+    safePlay()
+  }
+  if(playMode.value==='oneloop'){
+    audioRef.value.currentTime=0
+    await nextTick()
+    safePlay()
+  }
+}
+//控制上一首，下一首
+const turnPrevious=async()=>{
+  if(currentMusicIndex<=0){
+    currentMusicIndex.value=props.musicList.length-1
+  }
+  else{
+    currentMusicIndex.value--
+  }
+  await nextTick()
+  safePlay()
+}
+const turnNext=async()=>{
+
+}
+//音乐进度条逻辑
+const currentTime = ref(0)
+const duration = ref(0)
+const isDragging=ref(false)
 const onTimeupdate=(e)=>{
   if(!isDragging.value){
     currentTime.value = e.target.currentTime
@@ -113,13 +167,11 @@ const clickBarHandler=(e)=>{
     audioRef.value.currentTime=e
   }
 }
-const onDragStart = (value) => {
-  // 开始拖拽
+const onDragStart = () => {
   isDragging.value = true
 }
 
 const onDragEnd = (value) => {
-  // 结束拖拽，执行跳转
   isDragging.value = false
   
   const audio = audioRef.value
@@ -127,10 +179,6 @@ const onDragEnd = (value) => {
     audio.currentTime = value
   }
 }
-const play=()=>{
-  audioRef.value.play() 
-}
-//处理播放方式逻辑
 
 //处理音乐收藏逻辑
 const isFavorited=ref(false)
@@ -149,7 +197,6 @@ onMounted(() => {
     if (audio.duration) {
       duration.value = audio.duration
     }
-    
     // 同时监听事件（处理网络加载的情况）
     audio.addEventListener('loadedmetadata', (e) => {
       duration.value = e.target.duration
@@ -220,7 +267,9 @@ onMounted(() => {
         width: 30px;
         height: 30px;
         .mode-option-container{
-          background-color: aliceblue;
+          display: flex;
+          flex-direction: column ;
+          gap: 5px;
         }
       }
       .main-control-container{

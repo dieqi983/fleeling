@@ -41,6 +41,7 @@ const iconSrc=computed(()=>{
   }
     span{
       font-size: var(--text-size-sm);
+      white-space: nowrap;
     }
 }
 </style>

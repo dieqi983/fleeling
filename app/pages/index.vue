@@ -236,12 +236,14 @@ const showInfo=ref([
 ])
 const musicList=ref([
   {
+    id:1,
     url:'/mp3/bird.mp3',
     pic:'/textures/1.jpg',
     singer:'jiegeng',
     name:'bird',
   },
   {
+    id:2,
     url:'/mp3/cang.mp3',
     pic:'/textures/2.jpg',
     singer:'jiegeng',

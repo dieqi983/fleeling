@@ -49,7 +49,22 @@
           </div>
         </div>
         <div class="volume-container">
-          <PromptIcon iconType="volume" status="all"/>
+          <PromptIcon iconType="volume" status="all">
+            <template #default>
+              <div class="volume-process-bar">
+                <div class="volume-text">
+                  <span>{{currentVolume}}%</span>
+                </div>
+                <ProcessBar 
+                size="sm" 
+                barColor="white" 
+                fillColor="black"
+                :maxValue="100"
+                v-model="currentVolume"
+                />
+              </div>
+            </template>
+          </PromptIcon>
         </div>
       </div>
       <div class="process-bar-container">
@@ -85,20 +100,28 @@
 </template>
 
 <script setup>
-import { nextTick, ref } from 'vue'
-import IconText from '../IconText.vue'
+import { computed, watch } from 'vue'
 
 const audioRef=ref(null)
 const props=defineProps({
   musicList:{
     type:Array,
     default:()=>[],
+  },
+  //用户已收藏集合（采用集合储存可以高效查询）
+  favoritedSet:{
+    type:Set,
+    default:()=>new Set(),
   }
 })
 const currentMusicIndex=ref(0)
 const isPlaying=ref(false)
 //播放方式状态
 const playMode=ref('listloop')
+//音量状态
+const currentVolume=ref(0)
+//判断是否初始化volume
+let isFirstVolumeChange = true
 const currentPlayMusic=computed(()=>{
   return props.musicList[currentMusicIndex.value].url
 })
@@ -121,17 +144,27 @@ const safePlay=()=>{
     audioRef.value.play()
   },{ once: true })
 }
+const switchMusic = async (direction) => {
+  if (!props.musicList || props.musicList.length === 0) return
+  
+  const total = props.musicList.length
+  let newIndex
+  
+  if (direction === 'next') {
+    newIndex = (currentMusicIndex.value + 1) % total
+  } else if (direction === 'prev') {
+    newIndex = (currentMusicIndex.value - 1 + total) % total
+  }
+  if (newIndex !== currentMusicIndex.value) {
+    currentMusicIndex.value = newIndex
+    await nextTick()
+    safePlay()
+  }
+}
 const onEnded= async()=>{
   isPlaying.value=false
   if(playMode.value==='listloop'){
-    if(currentMusicIndex.value>=props.musicList.length-1){
-      currentMusicIndex.value=0
-    }
-    else{
-      currentMusicIndex.value++
-    }
-    await nextTick()
-    safePlay()
+    switchMusic('next')
   }
   if(playMode.value==='oneloop'){
     audioRef.value.currentTime=0
@@ -140,19 +173,8 @@ const onEnded= async()=>{
   }
 }
 //控制上一首，下一首
-const turnPrevious=async()=>{
-  if(currentMusicIndex<=0){
-    currentMusicIndex.value=props.musicList.length-1
-  }
-  else{
-    currentMusicIndex.value--
-  }
-  await nextTick()
-  safePlay()
-}
-const turnNext=async()=>{
-
-}
+const turnPrevious=()=>{switchMusic('prev')}
+const turnNext=()=>{switchMusic('next')}
 //音乐进度条逻辑
 const currentTime = ref(0)
 const duration = ref(0)
@@ -171,16 +193,31 @@ const onDragStart = () => {
   isDragging.value = true
 }
 
-const onDragEnd = (value) => {
+const onDragEnd = async(value) => {
   isDragging.value = false
   
   const audio = audioRef.value
   if (audio) {
     audio.currentTime = value
+    await nextTick()
+    audio.play()
   }
 }
-
+//处理音量
+watch(currentVolume,(newValue)=>{
+  if(isFirstVolumeChange){
+    isFirstVolumeChange=false
+    return
+  }
+  audioRef.value.volume=newValue/100
+})
 //处理音乐收藏逻辑
+const currentMusic=computed(()=>{
+  return props.musicList[currentMusicIndex.value].id
+})
+watch(currentMusic,(newMusicId)=>{
+  console.log(props.musicList)
+})
 const isFavorited=ref(false)
 const favoriteHandler=()=>{
   isFavorited.value=!isFavorited.value
@@ -193,6 +230,7 @@ const formatTime = (seconds) => {
 onMounted(() => {
   const audio = audioRef.value
   if (audio) {
+    currentVolume.value=audio.volume*100
     // 如果已经有 duration，直接获取
     if (audio.duration) {
       duration.value = audio.duration
@@ -283,6 +321,19 @@ onMounted(() => {
       .volume-container{
         width: 30px;
         height: 30px;
+        .volume-process-bar{
+          width: 15vw;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          .volume-text{
+            width: 4vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
       }
     }
     

@@ -37,9 +37,22 @@ const props = defineProps({
     type: String,
     default: 'md',
     validator: (value) => ['sm', 'md', 'lg'].includes(value) // 添加验证
+  },
+  barColor:{
+    type:String,
+    default:'rgb(0, 0, 0)'
+  },
+  fillColor:{
+    type:String,
+    default:'rgb(241, 121, 1)'
   }
 })
-
+const barColor=computed(()=>{
+  return props.barColor
+})
+const fillColor=computed(()=>{
+  return props.fillColor
+})
 const barHeight = computed(() => {
   if (props.size === 'sm') return '5px'
   if (props.size === 'md') return '7px'
@@ -131,12 +144,12 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .process-bar {
-  background-color: var(--text-color);
+  background-color: v-bind(barColor);
   width: 100%;
   position: relative;
   
   .process-fill {
-    background-color: var(--button-bg-color);
+    background-color: v-bind(fillColor);
     width: v-bind(fillWidth);
     height: 100%;
     pointer-events: none;
@@ -147,7 +160,7 @@ onUnmounted(() => {
     width: auto;
     height: 200%;
     aspect-ratio: 1 / 1;
-    background-color: var(--button-bg-color);
+    background-color: v-bind(fillColor);
     border-radius: 50%;
     top: -50%;
     transform: translateX(-50%);

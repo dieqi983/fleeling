@@ -86,7 +86,8 @@
       <div class="music-favorite">
         <PromptIcon 
         :iconType="isFavorited?'favorited':'favorite'" 
-        status="prompt" @click="favoriteHandler"
+        status="prompt"
+        @click="favoriteHandler"
         />
       </div>
       <div class="music-list">
@@ -100,9 +101,9 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
 
 const audioRef=ref(null)
+const emit=defineEmits(['favoriteChange'])
 const props=defineProps({
   musicList:{
     type:Array,
@@ -212,15 +213,28 @@ watch(currentVolume,(newValue)=>{
   audioRef.value.volume=newValue/100
 })
 //处理音乐收藏逻辑
-const currentMusic=computed(()=>{
+const isFavorited=ref(false)
+const musicId=computed(()=>{
   return props.musicList[currentMusicIndex.value].id
 })
-watch(currentMusic,(newMusicId)=>{
-  console.log(props.musicList)
-})
-const isFavorited=ref(false)
+watch(musicId,(newMusicId)=>{
+  isFavorited.value=props.favoritedSet.has(newMusicId)
+},{immediate:true})
+
 const favoriteHandler=()=>{
+  const oldState=isFavorited.value
   isFavorited.value=!isFavorited.value
+  return new Promise((resolve, reject)=>{
+    emit('favoriteChange',{
+      musicId: musicId.value,
+      curFavorState: isFavorited.value,
+      resolve, 
+      reject    
+    })
+  })
+  .catch(()=>{
+    isFavorited.value=oldState 
+  })
 }
 const formatTime = (seconds) => {
   const mins = Math.floor(seconds / 60)

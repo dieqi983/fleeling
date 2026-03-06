@@ -29,7 +29,11 @@
       <div class="test-dialog"></div>
     </ExtendButton>
     <div class="music-footer">
-      <MusicController :musicList="musicList"/>
+      <MusicController 
+      :musicList="musicList" 
+      :favoritedSet="favoriteSet"
+
+      />
     </div>
     <section class="main-container">
         <div class="text-container">
@@ -250,6 +254,8 @@ const musicList=ref([
     name:'cang',
   }
 ])
+const favoriteSet=new Set([1])
+
 </script>
 
 <style lang="scss" scoped>

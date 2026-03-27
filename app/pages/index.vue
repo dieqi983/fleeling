@@ -30,8 +30,7 @@
     </ExtendButton>
     <div class="music-footer">
       <MusicController 
-      :musicList="musicList" 
-      :favoritedSet="favoriteSet"
+      :currentMusic="musicList[0]" 
 
       />
     </div>

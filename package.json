@@ -21,6 +21,7 @@
   "devDependencies": {
     "@iconify/json": "^2.2.432",
     "@iconify/vue": "^5.0.0",
+    "@vitejs/plugin-vue": "^6.0.5",
     "sass": "^1.97.2",
     "unplugin-icons": "^23.0.1"
   }

@@ -6,5 +6,13 @@
   --text-size-sm:clamp(0.8rem, 2vw, 1.2rem);
   --text-size-md:clamp(1.1rem, 2.5vw, 1.8rem);
   --text-size-lg:clamp(1.5rem, 3vw, 2.1rem);
-  --prompt-text:13px
+  --prompt-text:13px;
+  --z-base: 0;
+  --z-content: 10;
+  --z-loop: 100;           // 滚动文字
+  --z-header: 2000;        // 标题、扩展按钮
+  --z-music-container: 2100;  // 音乐组件容器
+  --z-music-list: 2101;    // 音乐列表
+  --z-modal: 4000;         // 弹窗
+  --z-toast: 5000;         // 提示
 } 

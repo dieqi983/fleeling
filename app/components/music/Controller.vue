@@ -98,10 +98,10 @@
         />
       </div>
       <div class="music-list">
-        <PromptIcon iconType="list" status="prompt" @click="onShowPlaylist"/>
+        <PromptIcon iconType="list" status="prompt" @click.stop="onShowPlaylist"/>
       </div>
       <div class="music-user">
-        <PromptIcon iconType="users" status="prompt" @click="onShowUsers"/>
+        <PromptIcon iconType="users" status="prompt" @click.stop="onShowUsers"/>
       </div>
     </div>
   </div>

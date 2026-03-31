@@ -107,9 +107,6 @@ const musicPlay=(musicId)=>{
     overflow-x: hidden;
     overflow-y: scroll;
     gap: 2vh;
-    border-radius: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     .item-box{
       height: 70px;
       width: 100%;

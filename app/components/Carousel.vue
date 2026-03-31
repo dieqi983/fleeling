@@ -1,109 +1,94 @@
 <template>
-  <div
-    class="show-container"
-    ref="showWindowRef"
-    @click="turnPage"
-  >
-    <div 
-      class="imgs-container"
-      :style="containerStyle"
-    >
+  <div class="show-window-container">
+    <div class="slide-main-box" :class="{ vertical: direction === 'vertical' }">
       <div 
-        class="img-box" 
-        v-for="(item,index) in props.imgs"
-        :key="item.path+index"
+        v-for="(item, index) in allSlots"
+        :key="index"
+        class="slide-box"
       >
-        <img :src="item.path" alt="">
+        <component :is="allSlots[index]" />
       </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
-import { useMousePosition } from '../composables/useMousePosition';
+import { useSlots, computed } from 'vue'
+
+const slots = useSlots()
+const allSlots = slots.default() || []
 
 const props = defineProps({
-  imgs: {
-    type: Array,
-    default: () => [
-      {
-        path:'',
-        descript:'',
-      }
-    ],
+  currentIndex: {
+    type: Number,
+    default: 0,
+  },
+  direction: {
+    type: String,
+    default: 'horizontal', // 'horizontal' 或 'vertical'
+    validator: (value) => ['horizontal', 'vertical'].includes(value)
   }
 })
 
-const currentIndex = ref(0)
-const showWindowRef = ref(null)
-const showWindowWidth = ref(0)
-const {x:mouseX}=useMousePosition(showWindowRef)
-// 计算移动样式
-const containerStyle = computed(() => {
-  const distance = -currentIndex.value * showWindowWidth.value
-  return {
-    transform: `translateX(${distance}px)`,
-    transition: 'transform 0.3s ease' 
-  }
-})
-
-const turnPage = () => {
-  if (!showWindowRef.value) return
+const transformStyle = computed(() => {
+  if (!allSlots.length) return 'translate(0, 0)'
   
-  const rect = showWindowRef.value.getBoundingClientRect()
-  const centerX = rect.width / 2
+  let targetIndex = props.currentIndex
+  if (targetIndex > allSlots.length - 1) targetIndex = allSlots.length - 1
+  if (targetIndex < 0) targetIndex = 0
   
-  if (mouseX.value > centerX) {
-    if (currentIndex.value < props.imgs.length - 1) {
-      currentIndex.value++
-    }
+  if (props.direction === 'vertical') {
+    return `translateY(-${targetIndex * 100}%)`
   } else {
-    if (currentIndex.value > 0) {
-      currentIndex.value--
-    }
+    return `translateX(-${targetIndex * 100}%)`
   }
-}
-
-onMounted(() => {
-  showWindowWidth.value = showWindowRef.value.clientWidth
-  
-  // 监听窗口大小变化
-  window.addEventListener('resize', () => {
-    showWindowWidth.value = showWindowRef.value.clientWidth
-  })
 })
-const emit=defineEmits(['imgChange'])
-watch(currentIndex,()=>{
-  emit('imgChange',props.imgs[currentIndex.value].descript)
-},{immediate:true})
+
+const totalPages = computed(() => allSlots.length)
+
+defineExpose({
+  totalPages
+})
 </script>
 
 <style lang="scss" scoped>
-.show-container {
-  height: 100%; 
+.show-window-container {
+  height: 100%;
   width: 100%;
-  border: solid rgb(241, 98, 3) 2px;
-  border-radius: 10px;
   overflow: hidden;
-  &:hover{
-    cursor: pointer;
-  }
-  .imgs-container {
+  display: flex;
+  
+  .slide-main-box {
+    transform: v-bind(transformStyle);
     display: flex;
     height: 100%;
     width: 100%;
-    .img-box {
-      flex: 0 0 100%;
-      height: 100%;
-      box-sizing: border-box;
-      flex-shrink: 0;
-      img {
+    transition: transform 0.3s ease;
+    
+    // 水平切换
+    &:not(.vertical) {
+      flex-direction: row;
+      
+      .slide-box {
+        min-width: 100%;
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        display: block;
       }
+    }
+    
+    // 垂直切换
+    &.vertical {
+      flex-direction: column;
+      
+      .slide-box {
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+      }
+    }
+    
+    .slide-box {
+      flex-shrink: 0;
     }
   }
 }

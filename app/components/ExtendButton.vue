@@ -67,8 +67,8 @@ const props = defineProps({
     type: Object,
     default: () => {
       return {
-        width: 300,
-        height: 700,
+        width: 310,
+        height: 550,
       }
     }
   }
@@ -204,8 +204,8 @@ onUnmounted(() => {
   cursor: pointer;
   overflow: hidden;
   &.isOpen {
-    width: var(--expanded-width, 300px);
-    height: var(--expanded-height, 600px);
+    width: var(--expanded-width, 310px);
+    height: var(--expanded-height, 550px);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
     cursor: default;
   }

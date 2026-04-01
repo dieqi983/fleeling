@@ -1,15 +1,14 @@
 <template>
   <div class="home-container">
-    <div class="header-box">
-        <span class="site-title">FLEELING</span>
-        <ExtendButton class="extend-button">
-        </ExtendButton>
-    </div>
+    <ExtendButton class="extend-button">
+    </ExtendButton>
     <div class="main-box">
       <slot></slot>
     </div>
     <div class="footer-box">
-      <MusicGlobalBlock/>
+      <div class="music-footer">
+        <MusicGlobalBlock/>
+      </div>
     </div>
   </div>
 </template>
@@ -22,29 +21,30 @@
   .home-container{
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     position: relative;
-    .header-box{
-      height: 70px;
-      width:100%;
-      padding-top:10px ;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap:60vw;
-      .site-title{
-        font-size: 4vw;
-        line-height: 4vw;
-        display: inline-block;
-      }
+    .extend-button{
+      z-index: var(--z-header);
+      position: fixed;
+      right: 4vw;
+      top: 2vw;
     }
     .main-box{
-      flex: 1;
+      height: 100%;
+      width: 100%;
     }
     .footer-box{
+      position: fixed;
       height: 100px;
       width: 100%;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .music-footer{
+        width: 80%;
+        height: 100%;
+        z-index:var(--z-music-list) ;
+      }
     }
   }
 </style>

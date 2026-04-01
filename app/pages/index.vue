@@ -1,8 +1,5 @@
   <template>
-    <Carousel 
-    @wheel="handleWheel" 
-    :currentIndex="currentPage" 
-    ref="carouselRef">
+    <div class="index-container">
       <div class="main-box">
         <div class="cube-box">
           <Cube
@@ -33,53 +30,28 @@
           <GuideBar/>
         </div>
       </div>
+      <div class="loop-box">
+        <LoopText 
+        text="dlskadjalksjdlkajdlskjlkasjdlkajslkdjlaksjdlkasjldkasljdkalsd"/>
+      </div>
       <div class="show-box">
-        <TopShow :topUsers="topUsers"/>
+        <div class="info-box" @click="handleClick">
+        </div>
+        <div class="work-display-box">
+          <div class="img-box">
+            <DrawShow :path="testPath"/>
+          </div>
+        </div>
       </div>
       <div class="other-box"></div>
-    </Carousel>
+    </div>
   </template>
 
   <script setup>
-  import debounce from 'lodash/debounce'
-  import TopShow from '../components/user/TopShow.vue'
-  const currentPage = ref(0)
-  const carouselRef = ref(null)
-  const totalPages=ref(0)
-  const updateTotalPages = () => {
-    if (carouselRef.value) {
-      totalPages.value = carouselRef.value.totalPages
-    }
+  const testPath=ref('/textures/2.jpg')
+  const handleClick=()=>{
+      testPath.value='/textures/3.jpg'
   }
-  // 切换页面
-  const switchPage = (newPage) => {
-    if(newPage>=0&&newPage<=totalPages.value)
-    currentPage.value = newPage
-  }
-  const debouncedSwitch = debounce((newPage) => {
-    switchPage(newPage)
-  }, 300)
-  // 滚轮事件
-  const handleWheel = (e) => {
-    e.preventDefault()
-    
-    if (e.deltaY > 0) {
-      // 向下滚动，下一页
-      if (currentPage.value < totalPages.value - 1) {
-        debouncedSwitch(currentPage.value + 1)
-      }
-    } else {
-      // 向上滚动，上一页
-      if (currentPage.value > 0) {
-        debouncedSwitch(currentPage.value - 1)
-      }
-    }
-  }
-
-  onMounted(async() => {
-    await nextTick()
-    updateTotalPages()
-  })
   const topUsers=[
     {
       id:1,
@@ -110,31 +82,90 @@
 
   <style lang="scss" scoped>
   // 保持你原有的样式不变
-  .main-box{
-    height: 100%;
-    width: 100%;
-    min-width: 100%;
+  .index-container{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 45vw;
-    position: relative;
-    .cube-box{
-      width: min(44vw, 600px);
-      aspect-ratio: 1 / 1;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
+    flex-direction: column;
+    width: 100%;
+    .main-box{
+      height: 100vh;
+      width: 100%;
+      min-width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 45vw;
+      position: relative;
+      .cube-box{
+        width: min(44vw, 600px);
+        aspect-ratio: 1 / 1;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+    }
+    .loop-box{
+      height: 80px;
+      width: 100%;
+      background-color: black ;
+      color: var(--button-bg-color);
+      z-index: var(--z-loop);
+    }
+    .show-box{
+      width: 100%;
+      height: 100vh;
+      z-index: var(--z-base);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .info-box{
+        height: 100%;
+        width: 30%;
+      }
+      .work-display-box{
+        width: 70%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .img-box{
+          // background-color: orange;
+          width: 50vw;
+          height: 60vh;
+        }
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: var(--z-bg);
+      }
+    }
+    .other-box{
+      width: 100%;
+      height: 100vh;
+      z-index: var(--z-base); 
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--text-un-color);
+        opacity: 0.4;
+        pointer-events: none;
+        z-index: var(--z-bg);
+      }
     }
   }
-  .show-box{
-    width: 100%;
-    height: 100%;
-  }
-  .other-box{
-    width: 100%;
-    height: 100%;
-    background-color: pink;
-  }
+
   </style>

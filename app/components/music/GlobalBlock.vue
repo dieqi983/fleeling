@@ -40,12 +40,13 @@ const musicItems = Array.from({ length:30}, () => (
 
 <style lang="scss" scoped>
 .music-global-block{
+  border-radius: 10px;
   background-color: var(--text-un-color);
   z-index: var(--z-music-container);
   width: 100%;
   height: 100%;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
   .control-box{
     height: 100%;
     width: 100%;

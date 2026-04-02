@@ -15,6 +15,8 @@
 </template>
 
 <script setup>
+
+
 const props=defineProps({
   naviInfo:{
     type:Object,
@@ -29,7 +31,21 @@ const props=defineProps({
     validator(value){
       return ['lg','md','sm'].includes(value)
     }
+  },
+  textColor:{
+    type:String,
+    default:'rgb(0, 0, 0)'
+  },
+  hoverTextColor:{
+    type:String,
+    default:'rgb(241, 121, 1)'
   }
+})
+const textColor=computed(()=>{
+  return props.textColor
+})
+const hoverTextColor=computed(()=>{
+  return props.hoverTextColor
 })
 </script>
 
@@ -56,7 +72,7 @@ const props=defineProps({
       justify-content: center;
       align-items: center;
       .nav-link{
-        color:var(--text-color);
+        color:v-bind(textColor);
         text-decoration: none;
         font-size: var(--guide-size);
         font-weight: 500;
@@ -65,6 +81,7 @@ const props=defineProps({
       }
     }
     .icon-box {
+      
       padding: 6px 5px 0 0;
       width:var(--icon-size);
       height: var(--icon-size);
@@ -74,9 +91,9 @@ const props=defineProps({
       transition: all 0.3s ease;
     }
     .icon {
+      color: v-bind(textColor);
       width: 100%;
       height: 100%;
-      color:var(--text-color);
       transition: all 0.3s ease;
     }
     &:hover{
@@ -84,10 +101,10 @@ const props=defineProps({
         transform: translate(5px, -5px); 
       }
       .nav-link{
-        color: var(--button-bg-color);
+        color: v-bind(hoverTextColor);
       }
       .icon{
-        color:var(--button-bg-color)
+        color:v-bind(hoverTextColor);
       }
     }
   }

@@ -35,35 +35,25 @@
         text="dlskadjalksjdlkajdlskjlkasjdlkajslkdjlaksjdlkasjldkasljdkalsd"/>
       </div>
       <div class="show-box">
-        <div class="info-box" @click="handleClick">
-        </div>
-        <div class="work-display-box">
-          <div class="img-box">
-            <DrawShow :path="testPath"/>
-          </div>
-        </div>
+        <HomeTopWork :topUsers="topUsers"/>
       </div>
       <div class="other-box"></div>
     </div>
   </template>
 
   <script setup>
-  const testPath=ref('/textures/2.jpg')
-  const handleClick=()=>{
-      testPath.value='/textures/3.jpg'
-  }
   const topUsers=[
     {
       id:1,
       userName:'jiegeng',
       likes:9999,
-      masterpiecePath:'/textures/1.jpg'
+      masterpiecePath:'/textures/2.jpg'
     },
     {
       id:2,
       userName:'wudi',
       likes:9998,
-      masterpiecePath:'/textures/2.jpg'
+      masterpiecePath:'/textures/1.jpg'
     },
     {
       id:3,
@@ -116,25 +106,6 @@
       height: 100vh;
       z-index: var(--z-base);
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .info-box{
-        height: 100%;
-        width: 30%;
-      }
-      .work-display-box{
-        width: 70%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .img-box{
-          // background-color: orange;
-          width: 50vw;
-          height: 60vh;
-        }
-      }
       &::before {
         content: '';
         position: absolute;

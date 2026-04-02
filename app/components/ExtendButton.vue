@@ -260,7 +260,6 @@ onUnmounted(() => {
     justify-content: center;
     color: var(--text-un-color);
     font-size: var(--text-size-sm);
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 500;
     transition: all var(--cover-speed, 0.6s) cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2;

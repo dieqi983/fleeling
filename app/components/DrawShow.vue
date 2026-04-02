@@ -1,13 +1,11 @@
 <template>
   <div class="draw-container" ref="containerRef">
-    <!-- 旧图片 -->
     <img 
       ref="oldImgRef"
       :src="oldPath" 
       alt=""
       class="draw-image old-image"
     />
-    <!-- 新图片 -->
     <img 
       ref="newImgRef"
       :src="newPath" 
@@ -33,81 +31,85 @@ const oldPath = ref(props.path)
 const newPath = ref(props.path)
 const oldImgRef = ref(null)
 const newImgRef = ref(null)
-const containerRef = ref(null)
 let isAnimating = false
+let pendingPath = null // 待处理的路径
 
-// 初始化：新图片透明不可见
 onMounted(() => {
   if (newImgRef.value) {
     gsap.set(newImgRef.value, { opacity: 0, scale: 0.8, y: 0, rotation: 0 })
   }
 })
 
-// 退场动画 + 新图片渐显
-const exitAndShowAnimation = (nextPath) => {
-  return new Promise((resolve) => {
-    if (!oldImgRef.value || !newImgRef.value) {
-      resolve()
-      return
-    }
-    
-    // 准备新图片
-    newPath.value = nextPath
-    gsap.set(newImgRef.value, { 
-      opacity: 0, 
-      scale: 0.8, 
-      y: 0, 
-      rotation: 0,
-      display: 'block'
-    })
-    
-    // 创建时间线，同时执行两个动画
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // 动画完成后，将新图片设为显示，旧图片隐藏
-        oldPath.value = nextPath
-        gsap.set(oldImgRef.value, { opacity: 1, scale: 1, y: 0, rotation: 0 })
-        gsap.set(newImgRef.value, { opacity: 0, display: 'none' })
-        resolve()
-      }
-    })
-    
-    // 旧图片退场动画：倾斜 -> 缩小 -> 上移消失
-    tl.to(oldImgRef.value, {
-      rotation: -90,
-      duration: 1,
-      ease: "power2.in",
-    }, 0)
-    // .to(oldImgRef.value, {
-    //   y: -200,
-    //   duration: 0.5,
-    //   ease: "power2.in",
-    // }, 0.3) 
-    // .to(oldImgRef.value, {
-    //   scale: 0.6,
-    //   duration: 0.2,
-    //   ease: "power2.in",
-    // }, 0.2)
-    
-    // 新图片进场动画：从透明到完全显示
-    tl.to(newImgRef.value, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.6,
-      ease: "power2.out",
-    }, 0)
+// 执行动画的核心函数
+const performAnimation = async (nextPath) => {
+  if (!oldImgRef.value || !newImgRef.value) return
+  
+  // 准备新图片
+  newPath.value = nextPath
+  
+  gsap.set(newImgRef.value, { 
+    opacity: 0, 
+    scale: 0.5, 
+    y: 0, 
+    rotation: 0,
+    display: 'block'
   })
+  
+  // 创建时间线，同时执行两个动画
+  const tl = gsap.timeline({
+    onComplete: () => {
+      // 动画完成后，将旧图片更新为当前显示的图片
+      oldPath.value = nextPath
+      gsap.set(oldImgRef.value, { opacity: 1, scale: 1, x: 0, y: 0, rotation: 0 })
+      gsap.set(newImgRef.value, { opacity: 0, display: 'none' })
+      
+      isAnimating = false
+      
+      // 检查是否有待处理的切换
+      if (pendingPath !== null && pendingPath !== nextPath) {
+        const nextPending = pendingPath
+        pendingPath = null
+        startAnimation(nextPending)
+      }
+    }
+  })
+  
+  tl.to(oldImgRef.value, {
+    rotation: -45,
+    y: -200,
+    x: -200,
+    opacity: 0,
+    duration: 0.6,
+    ease: "power2.in",
+  }, 0)
+  
+  tl.to(newImgRef.value, {
+    opacity: 1,
+    scale: 1,
+    duration: 1,
+    ease: "power2.out",
+  }, 0)
+}
+
+// 启动动画（带防并发）
+const startAnimation = async (nextPath) => {
+  if (isAnimating) {
+    // 正在动画中，记录最新的待处理路径
+    pendingPath = nextPath
+    return
+  }
+  
+  // 如果新旧路径相同，不执行动画
+  if (nextPath === oldPath.value) return
+  
+  isAnimating = true
+  await performAnimation(nextPath)
 }
 
 // 监听 path 变化
 watch(() => props.path, async (newPath, oldPathValue) => {
-  if (newPath !== oldPathValue && !isAnimating) {
-    isAnimating = true
-    
-    // 执行退场 + 新图片渐显动画
-    await exitAndShowAnimation(newPath)
-    
-    isAnimating = false
+  if (newPath !== oldPathValue) {
+    startAnimation(newPath)
   }
 })
 </script>

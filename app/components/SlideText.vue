@@ -46,6 +46,10 @@ const props = defineProps({
   ease: {
     type: String,
     default: 'power2.out'
+  },
+  textColor:{
+    type:String,
+    default:'rgb(0,0,0)',
   }
 })
 
@@ -65,10 +69,11 @@ let ctx
 const currentCharsRefs = useDynamicRefs()
 const nextCharsRefs = useDynamicRefs()
 
-// 计算属性
 const currentChars = useTextToChars(currentText)
 const nextChars = useTextToChars(nextText)
-
+const textColor=computed(()=>{
+  return props.textColor
+})
 // 工具函数：获取有效的 DOM 元素
 const getValidElements = (refs) => {
   return refs.refs.value.filter(el => el)
@@ -221,7 +226,7 @@ defineExpose({
   display: inline-grid;
   grid-template-areas: "content";
   font-size: var(--text-size-md);
-  color:var(--text-color);
+  color:v-bind(textColor);
   user-select: none;
   min-height: 1.2em;
   font-weight: 500;

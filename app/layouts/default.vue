@@ -40,6 +40,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: var(--z-music-container);
       .music-footer{
         width: 80%;
         height: 100%;

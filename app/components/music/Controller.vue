@@ -12,7 +12,7 @@
     
     <div class="music-info-container">
       <div class="pic-container">
-        <Profile :path="currentMusic?.cover || '/textures/5.jpg'"/>
+        <Profile shape="square" :path="currentMusic?.cover || '/textures/5.jpg'"/>
       </div>
       <div class="music-text-info">
         <span class="music-name">{{ currentMusic?.name || '未知歌曲' }}</span>

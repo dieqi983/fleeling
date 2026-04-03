@@ -1,5 +1,6 @@
 <template>
   <div class="home-container">
+    <UserSuspendBox style="z-index: var(--z-header); position: fixed; left: 4vw; top: 20px;"/>
     <ExtendButton class="extend-button">
     </ExtendButton>
     <div class="main-box">

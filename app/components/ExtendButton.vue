@@ -67,8 +67,8 @@ const props = defineProps({
     type: Object,
     default: () => {
       return {
-        width: 310,
-        height: 550,
+        width: 300,
+        height: 500,
       }
     }
   }

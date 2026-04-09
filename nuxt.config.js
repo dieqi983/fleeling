@@ -6,5 +6,5 @@ export default defineNuxtConfig({
     '~/assets/styles/main.scss',
     '~/assets/styles/globalCssVariable.scss',
   ],
-  modules: ['unplugin-icons/nuxt'],
+  modules: ['unplugin-icons/nuxt','@pinia/nuxt'],
 })

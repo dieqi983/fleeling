@@ -1,37 +1,96 @@
-import { ref } from "vue"
+export const useUserStore = defineStore('user', () => {
+  const currentUser = ref(null)
+  const accessToken = ref(null)
+  const authStatus = ref('unknown')
+  let refreshPromise = null
 
-export const useUserStore=defineStore('user',()=>{
-  //当前用户
-  const currentUser=ref(null)
-  //是否已经登录（计算属性）
-  const isLogin=computed(()=>{
-    return currentUser.value !== null
+  const isLogin = computed(() => {
+    return currentUser.value !== null && accessToken.value !== null
   })
-  //是否初始化
-  const isInit=ref(false)
-  //是否在等待
-  const loading=ref(false)
-  const cuurentUserId=computed(()=>{
-    return currentUser.value?.id
-  })
-  const userMusicFavor=computed(()=>{
-    return new Set(currentUser.value?.musicFavors)
-  })
-  const setCurrentUser=(newUser)=>{
-    currentUser.value=newUser
+
+  const applyAuth = (authData) => {
+    accessToken.value = authData.accessToken
+    currentUser.value = authData.user
+    authStatus.value = 'authenticated'
   }
-  const login=async ()=>{
-    loading.value=true
+
+  const clearAuth = () => {
+    accessToken.value = null
+    currentUser.value = null
+    authStatus.value = 'anonymous'
+  }
+
+  const login = async (user) => {
+    console.log(useNuxtApp())
+    const { $$request } = useNuxtApp()
+    const result = await $$request('/auth/login', {
+      method: 'POST',
+      body: user,
+    })
+
+    applyAuth(result)
+    return result
+  }
+
+  const logout = async () => {
+    const { $request } = useNuxtApp()
+
     try {
-      //请求登录接口，设置cookie
-      //请求用户信息
-      //设置初始化状态为true
-    } catch (error) {
-      //重置用户状态
-      //设置初始化状态为true
-      //抛出错误
-    }finally{
-      loading.value=false
+      await $request('/auth/logout', {
+        method: 'POST',
+      })
+    } finally {
+      clearAuth()
     }
+  }
+
+  const refreshAuth = async () => {
+    const { $request } = useNuxtApp()
+
+    if (!refreshPromise) {
+      refreshPromise = (async () => {
+        try {
+          const result = await $request('/auth/refresh', {
+            method: 'POST',
+          })
+
+          applyAuth(result)
+          return result.accessToken
+        } catch (error) {
+          clearAuth()
+          throw error
+        } finally {
+          refreshPromise = null
+        }
+      })()
+    }
+
+    return refreshPromise
+  }
+
+  const initAuth = async () => {
+    if (authStatus.value !== 'unknown') {
+      return isLogin.value
+    }
+
+    try {
+      await refreshAuth()
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  return {
+    currentUser,
+    accessToken,
+    authStatus,
+    isLogin,
+    applyAuth,
+    clearAuth,
+    login,
+    logout,
+    refreshAuth,
+    initAuth,
   }
 })

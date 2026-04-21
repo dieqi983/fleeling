@@ -1,6 +1,11 @@
 <template>
   <div class="home-container">
-    <UserSuspendBox class="user-suspend-box"/>
+    <UserSuspendBox
+      class="user-suspend-box"
+      :is-login="userStore.isLogin"
+      :avator-path="userAvatarPath"
+      @click="handleLogin"
+    />
     <ExtendButton
      class="extend-button"
      v-model="isOpenExtend"
@@ -30,10 +35,18 @@
 </template>
 
 <script setup>
+const userStore = useUserStore()
+const userAvatarPath = computed(() => {
+  return userStore.currentUser?.avatarPath || '/icons/unknown.svg'
+})
+
 const isOpenExtend=ref(false)
 const closeExtend=()=>{
   isOpenExtend.value=false
-  console.log(isOpenExtend.value)
+}
+const handleLogin=async ()=>{
+  const result=await userStore.login()
+  console.log(result)
 }
 </script>
 

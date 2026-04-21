@@ -108,7 +108,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { useFetch, useNuxtApp, useRequestFetch } from 'nuxt/app'
+
 
 
 const props = defineProps({
@@ -128,7 +129,8 @@ const props = defineProps({
     default: false
   }
 })
-
+const { $$request }=useNuxtApp()
+$$request('http://localhost:3000/api/auth/test')
 const emit = defineEmits([
   'update:playing',
   'play',

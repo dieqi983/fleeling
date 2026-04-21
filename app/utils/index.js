@@ -4,3 +4,19 @@ export const formatTime = (seconds) => {
   const secs = Math.floor(seconds % 60)
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
+
+export function unwrapResponse(result) {
+  if (!result) {
+    throw new Error('Response body is empty')
+  }
+
+  if (result.code !== 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: result.message || 'Request failed',
+      data: result,
+    })
+  }
+
+  return result.data
+}

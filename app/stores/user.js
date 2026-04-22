@@ -45,12 +45,12 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const refreshAuth = async () => {
-    const { $request } = useNuxtApp()
+    const { $$request } = useNuxtApp()
 
     if (!refreshPromise) {
       refreshPromise = (async () => {
         try {
-          const result = await $request('/auth/refresh', {
+          const result = await $$request('/auth/refresh', {
             method: 'POST',
           })
 

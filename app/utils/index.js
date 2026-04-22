@@ -13,7 +13,7 @@ export function unwrapResponse(result) {
   if (result.code !== 0) {
     throw createError({
       statusCode: 400,
-      statusMessage: result.message || 'Request failed',
+      message: result.message || 'Request failed',
       data: result,
     })
   }

@@ -108,9 +108,6 @@
 </template>
 
 <script setup>
-import { useFetch, useNuxtApp, useRequestFetch } from 'nuxt/app'
-
-
 
 const props = defineProps({
   // 当前播放的音乐对象
@@ -123,14 +120,12 @@ const props = defineProps({
     type:Set,
     default:()=>new Set([])
   },
-  // 播放状态（由父组件控制）
+  // 播放状态（由父组件控制） 
   playing: {
     type: Boolean,
     default: false
   }
 })
-const { $$request }=useNuxtApp()
-$$request('http://localhost:3000/api/auth/test')
 const emit = defineEmits([
   'update:playing',
   'play',

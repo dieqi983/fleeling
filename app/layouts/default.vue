@@ -15,10 +15,10 @@
           <Profile path="icons/close.svg"/>
         </div>
         <div class="navigator-content">
-          <NuxtLink class="navi-text" to="/about">1.音乐中心</NuxtLink>
-          <NuxtLink class="navi-text" to="/about">2.插图中心</NuxtLink>
-          <NuxtLink class="navi-text" to="/about">3.故事中心</NuxtLink>
-          <NuxtLink class="navi-text" to="/about">4.个人中心</NuxtLink>
+          <NuxtLink class="navi-text" to="/">1.音乐中心</NuxtLink>
+          <NuxtLink class="navi-text" to="/">2.插图中心</NuxtLink>
+          <NuxtLink class="navi-text" to="/">3.故事中心</NuxtLink>
+          <NuxtLink class="navi-text" to="/">4.个人中心</NuxtLink>
         </div>
           <span class="other-text">本站还有很多不完善的地方，希望广大用户积极提供意见@jiegeng</span>
       </div>
@@ -45,7 +45,12 @@ const closeExtend=()=>{
   isOpenExtend.value=false
 }
 const handleLogin=async ()=>{
-  const result=await userStore.login()
+  const result=await userStore.login(JSON.stringify(
+    {
+      userName:'jiegeng',
+      passWord:'zw520hbh'
+    }
+  ))
   console.log(result)
 }
 </script>

@@ -21,7 +21,6 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const login = async (user) => {
-    console.log(useNuxtApp())
     const { $$request } = useNuxtApp()
     const result = await $$request('/auth/login', {
       method: 'POST',

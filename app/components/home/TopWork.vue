@@ -11,7 +11,7 @@
         textColor="white"
         />
         <GuideButton 
-        :naviInfo="{text:'GO',path:'/about'}"
+        :naviInfo="{text:'GO',path:'/'}"
         />
       </div>
       <div class="bottom-box" @click="toNextUser">

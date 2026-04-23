@@ -4,8 +4,5 @@ export default defineNuxtRouteMiddleware(async () => {
     return
   }
   
-  const result = await userStore.initAuth()
-  if(!result){
-    console.log('weidenglu')
-  }
+  await userStore.initAuth()
 })

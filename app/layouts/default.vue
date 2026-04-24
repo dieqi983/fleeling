@@ -12,11 +12,11 @@
      >
       <div class="navigator-box">
         <div class="close-icon" @click.stop="closeExtend">
-          <Profile path="icons/close.svg"/>
+          <Profile path="/icons/close.svg"/>
         </div>
         <div class="navigator-content">
-          <NuxtLink class="navi-text" to="/">1.音乐中心</NuxtLink>
-          <NuxtLink class="navi-text" to="/">2.插图中心</NuxtLink>
+          <NuxtLink class="navi-text" :to="{name:'music-edit'}">1.音乐中心</NuxtLink>
+          <NuxtLink class="navi-text" :to="{name:'media'}">2.插图中心</NuxtLink>
           <NuxtLink class="navi-text" to="/">3.故事中心</NuxtLink>
           <NuxtLink class="navi-text" to="/">4.个人中心</NuxtLink>
         </div>

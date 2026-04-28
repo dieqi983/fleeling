@@ -2,7 +2,7 @@
     <div class="index-container">
       <div class="main-box">
         <div class="cube-box">
-          <Cube
+          <HomeCube
             :textures="[
               '/textures/1.jpg',
               '/textures/2.jpg',

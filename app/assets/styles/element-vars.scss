@@ -1,0 +1,10 @@
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  $colors: (
+    "primary": (
+      "base": rgb(241, 121, 1), // 改成你想要的绿色
+    ),
+  ),
+    $font-family: (
+    "": "cursive",
+  )
+);

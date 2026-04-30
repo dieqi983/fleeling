@@ -11,6 +11,11 @@ export function unwrapResponse(result) {
   }
 
   if (result.code !== 0) {
+    ElMessage({
+      type:'error',
+      message:result.message,
+      plain:true
+    })
     throw createError({
       statusCode: 400,
       message: result.message || 'Request failed',

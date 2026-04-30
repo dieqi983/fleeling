@@ -57,6 +57,14 @@ export const useUserStore = defineStore('user', () => {
           return result.accessToken
         } catch (error) {
           clearAuth()
+          if(!import.meta.server){
+            ElMessage({
+              type:'error',
+              message:'未登录，请前往登录',
+              plain:true
+            })
+          }
+
           throw error
         } finally {
           refreshPromise = null

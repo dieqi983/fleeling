@@ -1,4 +1,6 @@
 
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -12,6 +14,9 @@ export default defineNuxtConfig({
     importStyle: 'scss',
   },
   vite: {
+    plugins: [
+      tailwindcss(),
+    ],
     css: {
       preprocessorOptions: {
         scss: {
@@ -30,7 +35,8 @@ export default defineNuxtConfig({
     }
   },
   css:[
-    '~/assets/styles/main.scss',
+    '~/assets/styles/tailwind.css',
+    '~/assets/styles/main.css',
     '~/assets/styles/globalCssVariable.scss',
   ],
   modules: ['unplugin-icons/nuxt','@pinia/nuxt', '@element-plus/nuxt'],

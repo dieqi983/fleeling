@@ -53,7 +53,7 @@
       id:2,
       userName:'wudi',
       likes:9998,
-      masterpiecePath:'/textures/1.jpg'
+      masterpiecePath:'/textures/7.jpg'
     },
     {
       id:3,

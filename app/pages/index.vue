@@ -42,6 +42,7 @@
   </template>
 
   <script setup>
+  
   const topUsers=[
     {
       id:1,

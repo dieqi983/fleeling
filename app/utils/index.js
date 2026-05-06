@@ -25,3 +25,5 @@ export function unwrapResponse(result) {
 
   return result.data
 }
+
+export const ANIMATED_MODAL_KEY = Symbol("AnimatedModal");

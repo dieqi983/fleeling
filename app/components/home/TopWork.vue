@@ -91,12 +91,12 @@ const toNextUser=()=>{
     align-items: center;
     position: relative;
     .top-box{
-      height: 50px;
-      width: 50px;
+      height: 30px;
+      width: 30x;
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: 20vh;
+      top: 30vh;
       animation: moveUpAndDown 1.5s ease-in-out infinite;
       &:hover{
         cursor: pointer;
@@ -111,12 +111,12 @@ const toNextUser=()=>{
       gap: 2vw;
     }
     .bottom-box{
-      height: 50px;
-      width: 50px;
+      height: 30px;
+      width: 30px;
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 20vh;
+      bottom: 30vh;
       animation: moveDownAndUp 1.5s ease-in-out infinite;
       &:hover{
         cursor: pointer;

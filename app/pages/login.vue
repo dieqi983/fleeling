@@ -65,7 +65,12 @@ const handleSubmit=async()=>{
   const isVerifyPass = await formRef.value.validate()
     if(isVerifyPass){
       const result=await login(user.value)
-      console.log(result)
+        ElMessage({
+          type:'success',
+          message:`欢迎回来，${result.user.userName}`,
+          plain:true
+        })
+        navigateTo('/')
     }
 }
 const rules=ref({

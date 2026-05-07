@@ -35,7 +35,6 @@ export default defineNuxtConfig({
     }
   },
   css:[
-    '~/assets/styles/tailwind.css',
     '~/assets/styles/main.css',
     '~/assets/styles/globalCssVariable.scss',
   ],

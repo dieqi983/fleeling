@@ -57,6 +57,7 @@
     height: 100%;
     width: 100%;
     display: flex;
+    padding-bottom: 5px;
     &.play{
       .music-cover {
         animation: rotate 2s linear infinite;

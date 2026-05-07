@@ -107,6 +107,9 @@ import { cn } from "@inspira-ui/plugins";
 import { useEventListener, useScrollLock } from "@vueuse/core";
 import { AnimatePresence, Motion } from "motion-v";
 
+const isHTMLElement = (value) =>
+  typeof HTMLElement !== "undefined" && value instanceof HTMLElement;
+
 const props = defineProps({
   class: {
     type: String,
@@ -137,7 +140,7 @@ const props = defineProps({
     default: 10000
   },
   teleportTo: {
-    type: [String, HTMLElement],
+    type: [String, Object],
     default: "body"
   }
 });
@@ -154,8 +157,8 @@ const isMounted = ref(false);
 const getPanelEl = () => {
   const raw = panelRef.value;
   if (!raw) return null;
-  if (raw instanceof HTMLElement) return raw;
-  if (raw.$el instanceof HTMLElement) return raw.$el;
+  if (isHTMLElement(raw)) return raw;
+  if (isHTMLElement(raw.$el)) return raw.$el;
   return null;
 };
 

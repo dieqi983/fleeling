@@ -30,14 +30,6 @@
           <GuideBar/>
         </div>
       </div>
-      <div class="loop-box">
-        <LoopText 
-        text="dlskadjalksjdlkajdlskjlkasjdlkajslkdjlaksjdlkasjldkasljdkalsd"/>
-      </div>
-      <div class="show-box">
-        <HomeTopWork :topUsers="topUsers"/>
-      </div>
-      <div class="other-box"></div>
     </div>
   </template>
 
@@ -93,49 +85,6 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
-      }
-    }
-    .loop-box{
-      height: 80px;
-      width: 100%;
-      background-color: black ;
-      color: var(--button-bg-color);
-      z-index: var(--z-loop);
-    }
-    .show-box{
-      width: 100%;
-      height: 100vh;
-      z-index: var(--z-base);
-      position: relative;
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: black;
-        opacity: 0.6;
-        pointer-events: none;
-        z-index: var(--z-bg);
-      }
-    }
-    .other-box{
-      width: 100%;
-      height: 100vh;
-      z-index: var(--z-base); 
-      position: relative;
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--text-un-color);
-        opacity: 0.4;
-        pointer-events: none;
-        z-index: var(--z-bg);
       }
     }
   }

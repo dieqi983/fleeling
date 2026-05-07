@@ -101,7 +101,7 @@
         <PromptIcon iconType="list" status="prompt" @click.stop="onShowPlaylist"/>
       </div>
       <div class="music-user">
-        <PromptIcon  @click="handleTest" iconType="users" status="prompt" @click.stop="onShowUsers"/>
+        <PromptIcon iconType="users" status="prompt" @click.stop="onShowUsers"/>
       </div>
     </div>
   </div>
@@ -142,18 +142,6 @@ const emit = defineEmits([
   'volume-change',
   'mode-change'
 ])
-const { $$api }=useNuxtApp()
-const handleTest=async()=>{
-  try {
-    console.log('点击了')
-    const result=await $$api('/works',{
-      method:'GET'
-    })
-    console.log(result)
-  } catch (error) {
-    console.error(error)
-  }
-}
 
 // 音频元素引用
 const audioRef = ref(null)

@@ -4,7 +4,7 @@
       <Profile :path="props.isLogin?props.avatorPath:'/icons/unknown.svg'"/>
     </div>
     <div class="navi-text">
-      <NuxtLink to="/" class="link-text">
+      <NuxtLink to="/login" class="link-text">
         {{props.isLogin?'退出':'登录'}}
       </NuxtLink>
       <NuxtLink to="/" class="link-text">

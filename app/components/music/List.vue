@@ -106,7 +106,7 @@ const musicPlay=(musicId)=>{
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: scroll;
-    gap: 2vh;
+    // gap: 2vh;
     .item-box{
       height: 70px;
       width: 100%;

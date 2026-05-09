@@ -55,7 +55,7 @@ const props=defineProps({
   },
   showType:{
     type:String,
-    default:'playListItem',
+    default:'showListItem',
     validator:(value)=>{
       return ['playListItem','showListItem'].includes(value)
     }
@@ -125,3 +125,4 @@ const musicPlay=(musicId)=>{
     }
   }
 </style>
+

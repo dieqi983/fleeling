@@ -1,31 +1,152 @@
-export const useMusicStore=defineStore('music',()=>{
-  const curMusicList=ref([])
-  const curPlayMusic=computed(()=>{
-    return curMusicList.value[0]
+export const useMusicStore = defineStore('music', () => {
+  const songsById = ref({})
+  const queue = ref([])
+  const currentMusicId = ref(null)
+
+  const curMusicList = computed(() => {
+    return queue.value
+      .map((id) => songsById.value[id])
+      .filter(Boolean)
   })
-  const toNext=(musicId)=>{
-    //先根据id找到音乐需要置顶的音乐对象的位置
-    const needMoveIndex=curMusicList.value.findIndex((music)=>{
-      return music.id===musicId
-    })
-    //如果是正在播放的或是已经就是第二首音乐或不存在就直接返回false
-    if(needMoveIndex===0 || needMoveIndex===1 ||needMoveIndex===-1){
+
+  const curPlayIndex = computed(() => {
+    if (currentMusicId.value === null) {
+      return -1
+    }
+
+    return queue.value.findIndex((id) => id === currentMusicId.value)
+  })
+
+  const curPlayMusic = computed(() => {
+    if (currentMusicId.value === null) {
+      return undefined
+    }
+
+    return songsById.value[currentMusicId.value]
+  })
+
+  const registerMusic = (music) => {
+    if (!music || music.id === undefined || music.id === null) {
+      return null
+    }
+
+    songsById.value[music.id] = {
+      ...(songsById.value[music.id] || {}),
+      ...music,
+    }
+
+    return music.id
+  }
+
+  const ensureCurrentMusic = (preferredIndex = 0) => {
+    if (!queue.value.length) {
+      currentMusicId.value = null
       return
     }
-    //获取需要移动的音乐对象
-    const needMoveMusic = curMusicList.value[needMoveIndex]
-    //删除原位置需要移动的音乐元素
-    curMusicList.value.splice(needMoveIndex, 1)
-    //在第二个位置插入需要移动的元素
-    curMusicList.value.splice(1,0,needMoveMusic)
+
+    if (!queue.value.includes(currentMusicId.value)) {
+      const safeIndex = Math.min(
+        Math.max(preferredIndex, 0),
+        queue.value.length - 1
+      )
+      currentMusicId.value = queue.value[safeIndex]
+    }
   }
-  const switchList=(musicList)=>{
-    curMusicList.value=musicList
+
+  const changePlayMusic = (needPlayMusic) => {
+    const musicId = registerMusic(needPlayMusic)
+    if (musicId === null || currentMusicId.value === musicId) {
+      return
+    }
+
+    const index = queue.value.findIndex((id) => id === musicId)
+
+    if (index === -1) {
+      if (!queue.value.length || curPlayIndex.value === -1) {
+        queue.value.push(musicId)
+      } else {
+        queue.value.splice(curPlayIndex.value, 0, musicId)
+      }
+    }
+
+    currentMusicId.value = musicId
   }
-  const switchPlayMusic=(music)=>{
-    curMusicList.value.unshift(music)
+
+  const addNextToPlay = (music) => {
+    const musicId = registerMusic(music)
+    if (musicId === null || currentMusicId.value === musicId) {
+      return
+    }
+
+    if (!queue.value.length || curPlayIndex.value === -1) {
+      queue.value.push(musicId)
+      ensureCurrentMusic()
+      return
+    }
+
+    const nextIndex = curPlayIndex.value + 1
+    const existedIndex = queue.value.findIndex((id) => id === musicId)
+
+    if (existedIndex === nextIndex) {
+      return
+    }
+
+    let insertIndex = nextIndex
+    if (existedIndex !== -1) {
+      queue.value.splice(existedIndex, 1)
+      if (existedIndex < nextIndex) {
+        insertIndex -= 1
+      }
+    }
+
+    queue.value.splice(insertIndex, 0, musicId)
   }
-  const deleteMusic=(musicId)=>{
-    
+
+  const addMusicToList = (music) => {
+    const musicId = registerMusic(music)
+    if (musicId === null || queue.value.includes(musicId)) {
+      return
+    }
+
+    queue.value.push(musicId)
+    ensureCurrentMusic()
+  }
+
+  const deleteMusic = (musicArr = []) => {
+    const deleteIdSet = new Set(
+      musicArr
+        .map((music) => music?.id)
+        .filter((id) => id !== undefined && id !== null)
+    )
+
+    if (!deleteIdSet.size) {
+      return
+    }
+
+    const fallbackIndex = curPlayIndex.value
+    const isCurrentDeleted =
+      currentMusicId.value !== null && deleteIdSet.has(currentMusicId.value)
+
+    queue.value = queue.value.filter((id) => !deleteIdSet.has(id))
+
+    if (isCurrentDeleted) {
+      ensureCurrentMusic(fallbackIndex)
+      return
+    }
+
+    ensureCurrentMusic()
+  }
+
+  return {
+    songsById,
+    queue,
+    currentMusicId,
+    curMusicList,
+    curPlayIndex,
+    curPlayMusic,
+    changePlayMusic,
+    addNextToPlay,
+    addMusicToList,
+    deleteMusic,
   }
 })

@@ -137,6 +137,22 @@ export const useMusicStore = defineStore('music', () => {
     ensureCurrentMusic()
   }
 
+  const changePlayList=(list=[],startId)=>{
+    songsById.value={}
+    list.forEach(music => {
+      registerMusic(music)
+    });
+    queue.value=list.map((music)=>{
+      return music.id
+    })  
+    if(!startId){
+      currentMusicId.value=queue.value[0]
+    }
+    else{
+      currentMusicId.value=startId
+    }
+    ensureCurrentMusic()
+  }
   return {
     songsById,
     queue,
@@ -148,5 +164,6 @@ export const useMusicStore = defineStore('music', () => {
     addNextToPlay,
     addMusicToList,
     deleteMusic,
+    changePlayList,
   }
 })

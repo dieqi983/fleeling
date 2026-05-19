@@ -5,14 +5,18 @@
       :src="currentMusic?.url"
       @ended="onEnded"
       @timeupdate="onTimeupdate"
-      @play="isPlaying=true"
-      @pause="isPlaying=false"
+      @play="onPlay"
+      @pause="onPause"
       @loadedmetadata="onLoadedMetadata"
     />
     
     <div class="music-info-container">
       <div class="pic-container">
-        <Profile shape="square" :path="currentMusic?.cover || '/textures/5.jpg'"/>
+        <el-avatar 
+        src="/textures/5.jpg"
+        style="width: 100%;height: 100%;border-radius: 10px;"
+        shape="square"
+        />
       </div>
       <div class="music-text-info">
         <span class="music-name">{{ currentMusic?.name || '未知歌曲' }}</span>
@@ -46,7 +50,7 @@
             <PromptIcon iconType="previous" @click="onPrevious"/>
           </div>
           <div class="pause">
-            <PromptIcon :iconType="isPlaying ? 'pause' : 'play'" @click="togglePlay"/>
+            <PromptIcon :iconType="playing ? 'pause' : 'play'" @click="togglePlay"/>
           </div>
           <div class="next">
             <PromptIcon iconType="next" @click="onNext"/>
@@ -126,6 +130,7 @@ const props = defineProps({
     default: false
   }
 })
+
 const emit = defineEmits([
   'update:playing',
   'play',
@@ -136,50 +141,45 @@ const emit = defineEmits([
   'control-favor-toggle',
   'show-playlist',
   'show-users',
-  'progress-change',
-  'progress-drag-start',
-  'progress-drag-end',
-  'volume-change',
   'mode-change'
 ])
 
 // 音频元素引用
 const audioRef = ref(null)
 
-// 内部状态
-const isPlaying = ref(props.playing)
-const playMode = ref('listloop')
-const currentVolume = ref(0)
-const currentTime = ref(0)
+// 组件内部维护的状态
+const currentTime = ref(0)  // 播放时间内部维护
 const duration = ref(0)
 const isDragging = ref(false)
-let isFirstVolumeChange = true
+const currentVolume = ref(70)  // 音量内部维护，默认70%
+
+// 播放模式（内部维护UI状态，但逻辑由父组件处理）
+const playMode = ref('listloop')
 
 // 收藏状态(计算属性)
 const isFavorited = computed(()=>{
-  return props.favorIdSet.has(props.currentMusic.id)
+  return props.favorIdSet.has(props.currentMusic?.id)
 })
-// 重置播放状态
-const resetPlayState = () => {
-  currentTime.value = 0
-  duration.value = 0
-  if (isPlaying.value) {
-    safePlay()
+
+// 安全播放
+const safePlay = () => {
+  const audio = audioRef.value
+  if (!audio) return
+  
+  const play = () => {
+    audio.play().catch(error => {
+      if (error.name !== 'AbortError') {
+        console.error('播放失败:', error)
+      }
+    })
+  }
+  
+  if (audio.readyState >= 3) {
+    play()
+  } else {
+    audio.addEventListener('canplay', play, { once: true })
   }
 }
-// 监听父组件传递的播放状态变化
-watch(() => props.playing, (newVal) => {
-  if (isPlaying.value !== newVal) {
-    isPlaying.value = newVal
-    syncPlayState()
-  }
-})
-
-// 监听当前音乐变化
-watch(() => props.currentMusic, () => {
-  resetPlayState()
-}, { immediate: true })
-
 
 // 同步播放状态
 const syncPlayState = async () => {
@@ -187,7 +187,7 @@ const syncPlayState = async () => {
   if (!audio) return
   
   try {
-    if (isPlaying.value) {
+    if (props.playing) {
       await audio.play()
     } else {
       audio.pause()
@@ -199,35 +199,28 @@ const syncPlayState = async () => {
   }
 }
 
+// 监听父组件传递的播放状态变化
+watch(() => props.playing, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    syncPlayState()
+  }
+})
 
-
-// 安全播放
-const safePlay = () => {
-  const audio = audioRef.value
-  if (!audio) return
-  
-  audio.addEventListener('canplay', () => {
-    audio.play().catch(error => {
-      if (error.name !== 'AbortError') {
-        console.error('播放失败:', error)
-      }
-    })
-  }, { once: true })
-}
+// 监听当前音乐变化
+watch(() => props.currentMusic, (newVal, oldVal) => {
+  if (newVal?.id !== oldVal?.id) {
+    currentTime.value = 0
+    duration.value = 0
+    
+    if (props.playing) {
+      safePlay()
+    }
+  }
+}, { deep: false })
 
 // 播放/暂停切换
-const togglePlay = async () => {
-  const newState = !isPlaying.value
-  isPlaying.value = newState
-  emit('update:playing', newState)
-  
-  if (newState) {
-    emit('play')
-    await syncPlayState()
-  } else {
-    emit('pause')
-    await syncPlayState()
-  }
+const togglePlay = () => {
+  emit('update:playing', !props.playing)
 }
 
 // 上一首
@@ -242,20 +235,19 @@ const onNext = () => {
 
 // 播放结束
 const onEnded = () => {
-  isPlaying.value = false
-  emit('update:playing', false)
   emit('ended')
-  
-  if (playMode.value === 'oneloop') {
-    // 单曲循环
-    audioRef.value.currentTime = 0
-    nextTick(() => {
-      safePlay()
-    })
-  } else {
-    // 顺序播放，通知父组件播放下一首
-    emit('next')
-  }
+}
+
+// 播放事件
+const onPlay = () => {
+  emit('update:playing', true)
+  emit('play')
+}
+
+// 暂停事件
+const onPause = () => {
+  emit('update:playing', false)
+  emit('pause')
 }
 
 // 设置播放模式
@@ -276,15 +268,13 @@ const onLoadedMetadata = (e) => {
 }
 
 const onProgressClick = (value) => {
-  if (!isDragging.value) {
-    audioRef.value.currentTime = value
-    emit('progress-change', value)
+  if (!isDragging.value && audioRef.value) {
+    audioRef.value.currentTime = currentTime.value 
   }
 }
 
 const onDragStart = () => {
   isDragging.value = true
-  emit('progress-drag-start')
 }
 
 const onDragEnd = async (value) => {
@@ -292,10 +282,9 @@ const onDragEnd = async (value) => {
   
   const audio = audioRef.value
   if (audio) {
-    audio.currentTime = value
-    emit('progress-drag-end', value)
+    audio.currentTime = currentTime.value 
     
-    if (isPlaying.value) {
+    if (props.playing) {
       await nextTick()
       audio.play().catch(error => {
         if (error.name !== 'AbortError') {
@@ -306,24 +295,20 @@ const onDragEnd = async (value) => {
   }
 }
 
-// 音量控制
+// 音量控制（内部维护）
 watch(currentVolume, (newValue) => {
-  if (isFirstVolumeChange) {
-    isFirstVolumeChange = false
-    return
-  }
-  
   const volume = newValue / 100
   if (audioRef.value) {
     audioRef.value.volume = volume
   }
-  emit('volume-change', volume)
+  // 保存到 localStorage
+  localStorage.setItem('player-volume', newValue)
 })
 
 // 收藏切换
 const toggleFavorite = () => {
-  const type=isFavorited.value?'delete':'add'
-  emit('control-favor-toggle',type)
+  const type = isFavorited.value ? 'delete' : 'add'
+  emit('control-favor-toggle', type)
 }
 
 // 显示播放列表
@@ -336,16 +321,18 @@ const onShowUsers = () => {
   emit('show-users')
 }
 
+
 // 初始化
 onMounted(() => {
   const audio = audioRef.value
   if (audio) {
-    currentVolume.value = audio.volume * 100
-    
-    if (audio.duration) {
-      duration.value = audio.duration
+    // 读取保存的音量
+    const savedVolume = localStorage.getItem('player-volume')
+    if (savedVolume) {
+      currentVolume.value = Number(savedVolume)
     }
-    
+    audio.volume = currentVolume.value / 100
+    duration.value=audio.duration
     if (props.playing) {
       safePlay()
     }

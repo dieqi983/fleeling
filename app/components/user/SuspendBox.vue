@@ -1,7 +1,10 @@
 <template>
   <div class="suspend-conitainer">
     <div class="circle-box">
-      <Profile :path="props.isLogin?props.avatorPath:'/icons/unknown.svg'"/>
+      <el-avatar
+      :src="props.isLogin?props.avatorPath:'/icons/unknown.svg'"
+      style="height: 100%;width: 100%; background-color: white;"
+      />
     </div>
     <div class="navi-text">
       <NuxtLink to="/login" class="link-text">

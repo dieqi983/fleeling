@@ -8,35 +8,54 @@
       />
     </div>
     <AnimatedModal v-model:open="islistOpen">
-      <AnimatedModalBody :showClose="false" class="w-1/2">
-            <div class=" w-full h-125 ">
-              <MusicList 
-              :musicList="musicItems" 
-              :favorIdSet="favorList"
-              />
-            </div>
-
+      <AnimatedModalBody :lockScroll="false" :showClose="false" class="w-1/2 h-2/3">
       </AnimatedModalBody>
     </AnimatedModal>
   </div>
 </template>
 
 <script setup>
+
 const islistOpen=ref(false)
 const openListShow=()=>{
   islistOpen.value=true
 }
 const favorList=ref(new Set([1,2]))
-const musicItems = Array.from({ length:30}, () => (
-  {
+const musicItems = [
+    {
     id:1,
     url:'/mp3/bird.mp3',
     pic:'/textures/1.jpg',
     singer:'jiegeng',
     name:'bird',
     duration:180
-  }
-))
+  },
+  {
+    id:2,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/1.jpg',
+    singer:'dieqi',
+    name:'depature',
+    duration:180
+  },
+  {
+    id:3,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/1.jpg',
+    singer:'wudi',
+    name:'klzhisahng',
+    duration:180
+  },
+  {
+    id:4,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/1.jpg',
+    singer:'oli',
+    name:'bird',
+    duration:180
+  },
+]
+
 </script>
 
 <style lang="scss" scoped>

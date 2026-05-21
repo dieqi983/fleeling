@@ -34,7 +34,67 @@
   </template>
 
   <script setup>
-  
+import { onMounted } from 'vue';
+import { useMusicStore } from '../stores/music';
+
+  const musicItems = [
+    {
+    id:1,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/1.jpg',
+    singer:'jiegeng',
+    name:'bird',
+    duration:180
+  },
+  {
+    id:2,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/2.jpg',
+    singer:'dieqi',
+    name:'depature',
+    duration:180
+  },
+  {
+    id:3,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/7.jpg',
+    singer:'wudi',
+    name:'klzhisahng',
+    duration:180
+  },
+  {
+    id:4,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/3.jpg',
+    singer:'oli',
+    name:'bird',
+    duration:180
+  },
+    {
+    id:5,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/3.jpg',
+    singer:'oli',
+    name:'bird',
+    duration:180
+  },
+  {
+    id:6,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/3.jpg',
+    singer:'oli',
+    name:'bird',
+    duration:180
+  },
+  {
+    id:7,
+    url:'/mp3/bird.mp3',
+    pic:'/textures/3.jpg',
+    singer:'oli',
+    name:'bird',
+    duration:180
+  }
+]
   const topUsers=[
     {
       id:1,
@@ -61,6 +121,11 @@
       masterpiecePath:'/textures/4.jpg'
     }
   ]
+  const { changePlayList }=useMusicStore()
+  onMounted(()=>{
+    changePlayList(musicItems,2)
+    
+  })
   </script>
 
   <style lang="scss" scoped>

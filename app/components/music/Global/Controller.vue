@@ -2,13 +2,14 @@
   <div class="music-global-block">
     <div class="control-box">
       <MusicController
-      :currentMusic="musicItems[0]" 
+      :currentMusic="curPlayMusic" 
       :favorIdSet="favorList"
       @show-playlist="openListShow"
       />
     </div>
     <AnimatedModal v-model:open="islistOpen">
       <AnimatedModalBody :lockScroll="false" :showClose="false" class="w-1/2 h-2/3">
+          <MusicPlayList/>
       </AnimatedModalBody>
     </AnimatedModal>
   </div>
@@ -16,45 +17,14 @@
 
 <script setup>
 
+const test=ref(true)
 const islistOpen=ref(false)
 const openListShow=()=>{
   islistOpen.value=true
 }
 const favorList=ref(new Set([1,2]))
-const musicItems = [
-    {
-    id:1,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/1.jpg',
-    singer:'jiegeng',
-    name:'bird',
-    duration:180
-  },
-  {
-    id:2,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/1.jpg',
-    singer:'dieqi',
-    name:'depature',
-    duration:180
-  },
-  {
-    id:3,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/1.jpg',
-    singer:'wudi',
-    name:'klzhisahng',
-    duration:180
-  },
-  {
-    id:4,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/1.jpg',
-    singer:'oli',
-    name:'bird',
-    duration:180
-  },
-]
+const musicStore = useMusicStore()
+const { curPlayMusic } = storeToRefs(musicStore)  
 
 </script>
 

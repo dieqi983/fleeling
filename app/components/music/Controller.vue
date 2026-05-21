@@ -345,6 +345,7 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   display: flex;
+  padding: 5px;
   
   .music-info-container {
     height: 100%;

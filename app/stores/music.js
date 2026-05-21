@@ -2,7 +2,7 @@ export const useMusicStore = defineStore('music', () => {
   const songsById = ref({})
   const queue = ref([])
   const currentMusicId = ref(null)
-
+  const isPlaying=ref(false)
   const curMusicList = computed(() => {
     return queue.value
       .map((id) => songsById.value[id])
@@ -157,6 +157,7 @@ export const useMusicStore = defineStore('music', () => {
     songsById,
     queue,
     currentMusicId,
+    isPlaying,
     curMusicList,
     curPlayIndex,
     curPlayMusic,

@@ -16,7 +16,7 @@
     </div>
     <div class="footer-box">
       <div class="music-footer">
-        <MusicGlobalBlock />
+        <MusicGlobalController />
       </div>
     </div>
   </div>

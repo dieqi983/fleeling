@@ -94,3 +94,25 @@ html.dark {
 html.light {
   color-scheme: light;
 }
+::-webkit-scrollbar {
+  width: 6px;  /* 纵向滚动条宽度 */
+  height: 6px; /* 横向滚动条高度 */
+}
+::-webkit-scrollbar-track {
+  background: transparent;  /* 轨道背景色 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);  /* 滑块颜色 */
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);  /* 悬停时颜色 */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;  /* 角落样式 */
+} 

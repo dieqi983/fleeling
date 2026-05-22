@@ -1,157 +1,193 @@
-  <template>
-    <div class="index-container">
-      <div class="main-box">
-        <div class="cube-box">
-          <HomeCube
-            :textures="[
-              '/textures/1.jpg',
-              '/textures/2.jpg',
-              '/textures/3.jpg',
-              '/textures/4.jpg',
-              '/textures/5.jpg',
-              '/textures/6.jpg',
-            ]"
-            :cubeSize="{
-              height:4,
-              width:4,
-              depth:4,
-            }"
-            :cameraPositon="{
-              x:0,
-              y:0,
-              z:8,
-            }"
-          />
+<template>
+  <div class="flex flex-col w-full">
+    <div class="h-screen w-full min-w-full flex justify-center items-center gap-[45vw] relative">
+      <div class=" w-150 2xl:w-220 aspect-square fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <HomeCube
+          :textures="[
+            '/textures/1.jpg',
+            '/textures/2.jpg',
+            '/textures/3.jpg',
+            '/textures/4.jpg',
+            '/textures/5.jpg',
+            '/textures/6.jpg',
+          ]"
+          :cubeSize="{
+            height: 4,
+            width: 4,
+            depth: 4,
+          }"
+          :cameraPositon="{
+            x: 0,
+            y: 0,
+            z: 8,
+          }"
+        />
+      </div>
+    <div class="w-1/2 h-full flex pl-25 2xl:pl-45">
+      <div class="flex justify-center flex-col gap-2">
+        <HomeBoxReveal color="rgb(241, 121, 1)">
+          <p class="text-7xl 2xl:text-8xl">
+            Fleeing<span class="text-(--button-bg-color)">.</span>
+          </p>
+        </HomeBoxReveal>
+
+        <HomeBoxReveal
+          color="rgb(241, 121, 1)"
+          :duration="0.8"
+        >
+          <h2 class="mt-[.5rem] text-lg 2xl:text-2xl">
+            tips：Showcase users is
+            <span class="text-(--button-bg-color)">
+              Top 6
+            </span>
+          </h2>
+        </HomeBoxReveal>
+        <HomeBoxReveal
+          color="rgb(241, 121, 1)"
+          :duration="0.8"
+        >
+          <h2 class="mt-[.5rem] text-lg 2xl:text-2xl">
+            you can
+            <span class="text-(--button-bg-color)">
+              click to enter
+            </span>
+          </h2>
+        </HomeBoxReveal>
+      </div>
+      </div>
+      <div class="w-1/2 h-full flex justify-center items-center pr-40 2xl:pr-65 ">
+        <div class="flex items-center gap-3">
+          <SlideText text="jiegeng" />
+          <div class="w-6 h-6 2xl:w-8 2xl:h-8">
+            <img src="/icons/navi.svg" alt="">
+          </div>
         </div>
-        <div class="text-show-container">
-          <SlideText text="默认嘻嘻哈哈"/>
-        </div>
-        <div class="text-nav-container">
-          <GuideBar/>
-        </div>
+
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script setup>
-import { onMounted } from 'vue';
-import { useMusicStore } from '../stores/music';
-
-  const musicItems = [
-    {
-    id:1,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/1.jpg',
-    singer:'jiegeng',
-    name:'bird',
-    duration:180
+<script setup>
+import { onMounted } from 'vue'
+import { useMusicStore } from '../stores/music'
+const musicItems = [
+  {
+    id: 1,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/1.jpg',
+    singer: 'jiegeng',
+    name: 'bird',
+    duration: 180
   },
   {
-    id:2,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/2.jpg',
-    singer:'dieqi',
-    name:'depature',
-    duration:180
+    id: 2,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/2.jpg',
+    singer: 'dieqi',
+    name: 'depature',
+    duration: 180
   },
   {
-    id:3,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/7.jpg',
-    singer:'wudi',
-    name:'klzhisahng',
-    duration:180
+    id: 3,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/7.jpg',
+    singer: 'wudi',
+    name: 'klzhisahng',
+    duration: 180
   },
   {
-    id:4,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/3.jpg',
-    singer:'oli',
-    name:'bird',
-    duration:180
-  },
-    {
-    id:5,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/3.jpg',
-    singer:'oli',
-    name:'bird',
-    duration:180
+    id: 4,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
   },
   {
-    id:6,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/3.jpg',
-    singer:'oli',
-    name:'bird',
-    duration:180
+    id: 5,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
   },
   {
-    id:7,
-    url:'/mp3/bird.mp3',
-    pic:'/textures/3.jpg',
-    singer:'oli',
-    name:'bird',
-    duration:180
+    id: 6,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
+  },
+  {
+    id: 7,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
+  },
+  {
+    id: 8,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
+  },
+  {
+    id: 9,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
+  },
+  {
+    id: 10,
+    url: '/mp3/bird.mp3',
+    pic: '/textures/3.jpg',
+    singer: 'oli',
+    name: 'bird',
+    duration: 180
   }
 ]
-  const topUsers=[
-    {
-      id:1,
-      userName:'jiegeng',
-      likes:9999,
-      masterpiecePath:'/textures/2.jpg'
-    },
-    {
-      id:2,
-      userName:'wudi',
-      likes:9998,
-      masterpiecePath:'/textures/7.jpg'
-    },
-    {
-      id:3,
-      userName:'zzhh',
-      likes:9997,
-      masterpiecePath:'/textures/3.jpg'
-    },
-    {
-      id:4,
-      userName:'dieqi',
-      likes:9996,
-      masterpiecePath:'/textures/4.jpg'
-    }
-  ]
-  const { changePlayList }=useMusicStore()
-  onMounted(()=>{
-    changePlayList(musicItems,2)
-    
-  })
-  </script>
 
-  <style lang="scss" scoped>
-  // 保持你原有的样式不变
-  .index-container{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    .main-box{
-      height: 100vh;
-      width: 100%;
-      min-width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 45vw;
-      position: relative;
-      .cube-box{
-        width: min(44vw, 600px);
-        aspect-ratio: 1 / 1;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-      }
-    }
+const topUsers = [
+  {
+    id: 1,
+    userName: 'jiegeng',
+    likes: 9999,
+    masterpiecePath: '/textures/2.jpg'
+  },
+  {
+    id: 2,
+    userName: 'wudi',
+    likes: 9998,
+    masterpiecePath: '/textures/7.jpg'
+  },
+  {
+    id: 3,
+    userName: 'zzhh',
+    likes: 9997,
+    masterpiecePath: '/textures/3.jpg'
+  },
+  {
+    id: 4,
+    userName: 'dieqi',
+    likes: 9996,
+    masterpiecePath: '/textures/4.jpg'
   }
+]
 
-  </style>
+const { changePlayList } = useMusicStore()
+
+onMounted(() => {
+  changePlayList(musicItems, 2)
+})
+</script>
+
+<style scoped>
+
+</style>

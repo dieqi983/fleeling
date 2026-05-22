@@ -24,7 +24,12 @@ export const useMusicStore = defineStore('music', () => {
 
     return songsById.value[currentMusicId.value]
   })
-
+  const pausePlay=()=>{
+    isPlaying.value=false
+  }
+  const play=()=>{
+    isPlaying.value=true
+  }
   const registerMusic = (music) => {
     if (!music || music.id === undefined || music.id === null) {
       return null
@@ -70,6 +75,7 @@ export const useMusicStore = defineStore('music', () => {
     }
 
     currentMusicId.value = musicId
+    play()
   }
 
   const addNextToPlay = (music) => {
@@ -161,6 +167,8 @@ export const useMusicStore = defineStore('music', () => {
     curMusicList,
     curPlayIndex,
     curPlayMusic,
+    pausePlay,
+    play,
     changePlayMusic,
     addNextToPlay,
     addMusicToList,

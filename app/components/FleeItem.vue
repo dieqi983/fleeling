@@ -1,8 +1,8 @@
 <template>
   <li 
     :class="[
-      'group list-none h-full w-full border -mt-px flex transition-colors duration-300 ease-in-out cursor-pointer hover:bg-(--button-bg-color)',
-      {'bg-gray-50': bgIsGray},
+      'group list-none h-full w-full flex transition-colors duration-300 ease-in-out cursor-pointer hover:bg-(--button-bg-color)',
+      {'bg-gray-100': bgIsGray},
     ]"
     @click="handleClick"
   >
@@ -19,12 +19,15 @@
     </div>
 
     <!-- 主要信息区域 -->
-    <div class="w-1/3 h-full flex items-center justify-center">
+    <div class="w-4/10 h-full flex items-center justify-center">
       <slot name="item-info"/>
     </div>
 
     <!-- 附加信息区域 -->
-    <div class="w-1/3 h-full flex justify-center items-center">
+    <div 
+    v-if="needOther"
+    class="w-2/10 h-full flex justify-center items-center"
+    >
       <slot name="item-other"/>
     </div>
 
@@ -57,6 +60,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  needOther:{
+    type:Boolean,
+    default:true
+  }
 })
 
 const emit = defineEmits(['selected', 'unSelect'])

@@ -1,5 +1,5 @@
 <template>
-  <div class="music-controller">
+  <div class="w-full h-full flex pt-3 pl-6 pr-5 pb-1">
     <audio 
       ref="audioRef" 
       :src="currentMusic?.url"
@@ -10,26 +10,34 @@
       @loadedmetadata="onLoadedMetadata"
     />
     
-    <div class="music-info-container">
-      <div class="pic-container">
+    <!-- 音乐信息区域 -->
+    <div class="h-full w-1/5 flex justify-center items-center gap-[2vw]">
+      <div class="h-4/5 aspect-square">
         <el-avatar 
-        src="/textures/5.jpg"
-        style="width: 100%;height: 100%;border-radius: 10px;"
-        shape="square"
+          :src="currentMusic?.pic || '/textures/5.jpg'"
+          class="!w-full !h-full !rounded-[10px]"
+          shape="square"
         />
       </div>
-      <div class="music-text-info">
-        <span class="music-name">{{ currentMusic?.name || '未知歌曲' }}</span>
-        <span class="singer-name">{{ currentMusic?.singer || '--未知歌手' }}</span>
+      <div class="flex flex-col w-35 h-4/5 justify-center">
+        <span class="text-2xl 2xl:text-3xl whitespace-nowrap overflow-hidden text-ellipsis block w-full">
+          {{ currentMusic?.name || '未知歌曲' }}
+        </span>
+        <span class="text-lg 2xl:text-xl text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis block w-full">
+          {{ currentMusic?.singer || '--未知歌手' }}
+        </span>
       </div>
     </div>
     
-    <div class="music-control-container">
-      <div class="widget-container">
-        <div class="playmode-container">
+    <!-- 音乐控制区域 -->
+    <div class="h-full w-[55%] flex flex-col justify-center items-center">
+      <!-- 控制按钮组 -->
+      <div class="h-[40%] w-1/2 flex justify-between">
+        <!-- 播放模式 -->
+        <div class="w-7.5 h-7.5 2xl:w-9 2xl:h-9">
           <PromptIcon :iconType="playMode" status="all">
             <template #default>
-              <div class="mode-option-container">
+              <div class="flex flex-col gap-1">
                 <IconText 
                   icon-type="arrow-right" 
                   text="单曲循环"
@@ -45,23 +53,25 @@
           </PromptIcon>
         </div>
         
-        <div class="main-control-container">
-          <div class="previous">
+        <!-- 主控制按钮 -->
+        <div class="flex gap-5">
+          <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
             <PromptIcon iconType="previous" @click="onPrevious"/>
           </div>
-          <div class="pause">
+          <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
             <PromptIcon :iconType="playing ? 'pause' : 'play'" @click="togglePlay"/>
           </div>
-          <div class="next">
+          <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
             <PromptIcon iconType="next" @click="onNext"/>
           </div>
         </div>
         
-        <div class="volume-container">
+        <!-- 音量控制 -->
+        <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
           <PromptIcon iconType="volume" status="all">
             <template #default>
-              <div class="volume-process-bar">
-                <div class="volume-text">
+              <div class="w-[15vw] p-2 flex items-center gap-1">
+                <div class="w-[4vw] flex justify-center items-center">
                   <span>{{ currentVolume }}%</span>
                 </div>
                 <ProcessBar 
@@ -77,9 +87,12 @@
         </div>
       </div>
       
-      <div class="process-bar-container">
-        <span class="time-text">{{ formatTime(currentTime) }}</span>
-        <div class="progress-wrapper">
+      <!-- 进度条区域 -->
+      <div class="h-[40%] w-4/5 flex gap-3 justify-center items-center">
+        <span class="block text-center text-sm text-gray-600 min-w-[45px]">
+          {{ formatTime(currentTime) }}
+        </span>
+        <div class="flex-1 flex items-center h-full">
           <ProcessBar 
             v-model="currentTime"
             :maxValue="duration"
@@ -89,28 +102,30 @@
             @clickBar="onProgressClick"
           />
         </div>
-        <span class="time-text">{{ formatTime(duration) }}</span>
+        <span class="block text-center text-sm text-gray-600 min-w-[45px]">
+          {{ formatTime(duration) }}
+        </span>
       </div>
     </div>
     
-    <div class="other-handle-container">
-      <div class="music-favorite">
+    <!-- 右侧操作按钮 -->
+    <div class="h-full w-1/4 flex justify-center items-center gap-[5vw]">
+      <div class="h-[30px] w-[30px] 2xl:w-9 2xl:h-9">
         <PromptIcon 
           :iconType="isFavorited ? 'favorited' : 'favorite'" 
           status="prompt"
           @click="toggleFavorite"
         />
       </div>
-      <div class="music-list">
+      <div class="h-[30px] w-[30px] 2xl:w-9 2xl:h-9">
         <PromptIcon iconType="list" status="prompt" @click.stop="onShowPlaylist"/>
       </div>
-      <div class="music-user">
+      <div class="h-[30px] w-[30px] 2xl:w-9 2xl:h-9">
         <PromptIcon iconType="users" status="prompt" @click.stop="onShowUsers"/>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 
 const props = defineProps({

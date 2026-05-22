@@ -1,7 +1,21 @@
 <template>
-  <div class="home-container">
+  <div class="relative w-full h-full">
+  <el-drawer 
+  v-model="isOpenDrawer" 
+  >
+  <template #header>
+    <div class="w-full h-6 2xl:h-10 flex gap-5 items-center">
+      <div class="aspect-square h-full 2xl:w-10 2xl:h-10">
+        <img src="/icons/many-edit.svg" alt="">
+      </div>
+      <span class=" text-xl 2xl:text-3xl">播放队列</span>
+    </div>
+  </template>
+
+    <MusicPlayList/>
+  </el-drawer>
     <UserSuspendBox
-      class="user-suspend-box"
+      class="fixed left-[4vw] top-[3vh] 2xl:left-[6vw] 2xl:top-[5vh] z-[var(--z-header)]"
       :is-login="userStore.isLogin"
       :avator-path="userAvatarPath"
     />
@@ -9,23 +23,27 @@
       :tabs="tabs"
       :activeTab="activeTab"
       @update:activeTab="handleTabChange"
-      class="header-tabs fixed top-[5vh] right-[5vw]"
+      class="fixed top-[6vh] right-[4vw] 2xl:top-[7vh] 2xl:right-[6vw] z-[var(--z-header)]"
     />
-    <div class="main-box">
+    <div class="w-full h-full">
       <slot></slot>
     </div>
-    <div class="footer-box">
-      <div class="music-footer">
-        <MusicGlobalController />
+    <div class="fixed bottom-0 flex items-center justify-center w-full max-w-430 h-[13vh] 2xl:h-[14vh] left-1/2 -translate-x-1/2 ">
+      <div class="w-4/5 h-full shadow-2xl">
+        <MusicController
+        :currentMusic="curPlayMusic" 
+        @show-playlist="isOpenDrawer=true"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+const isOpenDrawer=ref(false)
+const {curPlayMusic}=storeToRefs(useMusicStore())
 const userStore = useUserStore()
 const route = useRoute()
-
 const userAvatarPath = computed(() => {
   return userStore.currentUser?.avatarPath || '/icons/unknown.svg'
 })
@@ -71,44 +89,9 @@ const handleTabChange = async (tab) => {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.home-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-
-  .user-suspend-box {
-    z-index: var(--z-header);
-    position: fixed;
-    left: 4vw;
-    top: 2vh;
-  }
-
-  .header-tabs {
-    z-index: var(--z-header);
-  }
-
-  .main-box {
-    height: 100%;
-    width: 100%;
-  }
-
-  .footer-box {
-    position: fixed;
-    height: 100px;
-    width: 100%;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: var(--z-music-container);
-
-    .music-footer {
-      width: 80%;
-      height: 100%;
-      z-index: var(--z-music-list);
-    }
-  }
+<style scoped>
+:deep(.el-drawer__body) {
+  padding: 0 !important;
+  padding-left:10px !important;
 }
 </style>

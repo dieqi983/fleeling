@@ -28,7 +28,6 @@
         </div>
       </div>
     </template>
-
     <template #item-other>
       <div class="w-full h-full flex justify-center items-center">
         <span class=" text-xl">{{formatTime(music.duration)}}</span>
@@ -43,7 +42,7 @@
 
 <script setup>
 const attrs = useAttrs()
-const attrWhiteList=['bgIsGray','isBatchMode']
+const attrWhiteList=['bgIsGray','isBatchMode','needOther']
 const filteredAttrs = computed(() => {
   return Object.fromEntries(
     Object.entries(attrs).filter(([key])=>attrWhiteList.includes(key))

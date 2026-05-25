@@ -1,7 +1,7 @@
 <template>
     <div class="w-full ">
       <div
-      class=" w-full h-20 2xl:h-33"
+      class=" w-full h-24"
       v-for="(music,index) in curMusicList"
       :key="music.id"
       >
@@ -12,23 +12,23 @@
         :bgIsGray="index%2===0"
         >
         <div class=" w-full h-full flex justify-center items-center gap-5">
-          <div class="w-6 h-6 2xl:w-9 2xl:h-9">
+          <div class="w-6 h-6 ">
             <PromptIcon
             :iconType="music.id === curPlayMusic.id && isPlaying ? 'pause':'play'"
             @click="controlPlay(music)"
             />
           </div>
-          <div class="w-6 h-6 2xl:w-9 2xl:h-9">
+          <div class="w-6 h-6">
             <PromptIcon
             iconType="delete"
             />
           </div>
-          <div class="w-6 h-6 2xl:w-9 2xl:h-9">
+          <div class="w-6 h-6 ">
             <PromptIcon
             iconType="download"
             />
           </div>
-          <div class="w-6 h-6 2xl:w-9 2xl:h-9">
+          <div class="w-6 h-6">
             <PromptIcon
             iconType="toTop"
             @click="toNextPlay(music)"

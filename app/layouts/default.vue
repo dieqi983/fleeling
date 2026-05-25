@@ -4,18 +4,18 @@
   v-model="isOpenDrawer" 
   >
   <template #header>
-    <div class="w-full h-6 2xl:h-10 flex gap-5 items-center">
-      <div class="aspect-square h-full 2xl:w-10 2xl:h-10">
+    <div class="w-full h-7 flex gap-5 items-center">
+      <div class="aspect-square h-full ">
         <img src="/icons/many-edit.svg" alt="">
       </div>
-      <span class=" text-xl 2xl:text-3xl">播放队列</span>
+      <span class=" text-xl">播放队列</span>
     </div>
   </template>
 
     <MusicPlayList/>
   </el-drawer>
     <UserSuspendBox
-      class="fixed left-[4vw] top-[3vh] 2xl:left-[6vw] 2xl:top-[5vh] z-[var(--z-header)]"
+      class="fixed left-[4vw] top-[3vh]  z-[var(--z-header)]"
       :is-login="userStore.isLogin"
       :avator-path="userAvatarPath"
     />
@@ -23,12 +23,12 @@
       :tabs="tabs"
       :activeTab="activeTab"
       @update:activeTab="handleTabChange"
-      class="fixed top-[6vh] right-[4vw] 2xl:top-[7vh] 2xl:right-[6vw] z-[var(--z-header)]"
+      class="fixed top-[6vh] right-[4vw] z-[var(--z-header)]"
     />
     <div class="w-full h-full">
       <slot></slot>
     </div>
-    <div class="fixed bottom-0 flex items-center justify-center w-full max-w-430 h-[13vh] 2xl:h-[14vh] left-1/2 -translate-x-1/2 ">
+    <div class="fixed bottom-0 flex items-center justify-center w-full h-[12vh] left-1/2 -translate-x-1/2 ">
       <div class="w-4/5 h-full shadow-2xl">
         <MusicController
         :currentMusic="curPlayMusic" 

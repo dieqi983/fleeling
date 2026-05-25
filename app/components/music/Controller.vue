@@ -34,7 +34,7 @@
       <!-- 控制按钮组 -->
       <div class="h-[40%] w-1/2 flex justify-between">
         <!-- 播放模式 -->
-        <div class="w-7.5 h-7.5 2xl:w-9 2xl:h-9">
+        <div class="w-7.5 h-7.5">
           <PromptIcon :iconType="playMode" status="all">
             <template #default>
               <div class="flex flex-col gap-1">
@@ -55,19 +55,19 @@
         
         <!-- 主控制按钮 -->
         <div class="flex gap-5">
-          <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
+          <div class="w-[30px] h-[30px]">
             <PromptIcon iconType="previous" @click="onPrevious"/>
           </div>
-          <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
+          <div class="w-[30px] h-[30px]">
             <PromptIcon :iconType="playing ? 'pause' : 'play'" @click="togglePlay"/>
           </div>
-          <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
+          <div class="w-[30px] h-[30px]">
             <PromptIcon iconType="next" @click="onNext"/>
           </div>
         </div>
         
         <!-- 音量控制 -->
-        <div class="w-[30px] h-[30px] 2xl:w-9 2xl:h-9">
+        <div class="w-[30px] h-[30px]">
           <PromptIcon iconType="volume" status="all">
             <template #default>
               <div class="w-[15vw] p-2 flex items-center gap-1">
@@ -110,17 +110,17 @@
     
     <!-- 右侧操作按钮 -->
     <div class="h-full w-1/4 flex justify-center items-center gap-[5vw]">
-      <div class="h-[30px] w-[30px] 2xl:w-9 2xl:h-9">
+      <div class="h-[30px] w-[30px]">
         <PromptIcon 
           :iconType="isFavorited ? 'favorited' : 'favorite'" 
           status="prompt"
           @click="toggleFavorite"
         />
       </div>
-      <div class="h-[30px] w-[30px] 2xl:w-9 2xl:h-9">
+      <div class="h-[30px] w-[30px]">
         <PromptIcon iconType="list" status="prompt" @click.stop="onShowPlaylist"/>
       </div>
-      <div class="h-[30px] w-[30px] 2xl:w-9 2xl:h-9">
+      <div class="h-[30px] w-[30px]">
         <PromptIcon iconType="users" status="prompt" @click.stop="onShowUsers"/>
       </div>
     </div>

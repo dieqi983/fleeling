@@ -1,5 +1,5 @@
 <template>
-  <div class="inline-grid grid-areas-content text-2xl 2xl:text-4xl" ref="rootRef">
+  <div class="inline-grid grid-areas-content text-2xl" ref="rootRef">
     <!-- 当前文字 -->
     <div class="grid-area-content inline-flex justify-center items-center w-full h-full">
       <span 
